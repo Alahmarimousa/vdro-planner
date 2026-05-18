@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VDRO Planner — Cerebral Palsy Hip Reconstruction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a2540; --navy-deep:#06182e;
+  --teal:#0f7d8a; --teal-light:#3aa5b1;
+  --gold:#c9a55a; --gold-light:#e4c989;
+  --cream:#f7f3ec; --paper:#fbf8f2;
+  --ink:#1a2332; --muted:#6b7280;
+  --line:#e5dccb; --danger:#a4341d;
+  --success:#2f6b3a; --warning:#b8741f;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  background:var(--paper); color:var(--ink);
+  min-height:100vh; font-size:15px; line-height:1.5;
+  background-image:
+    radial-gradient(circle at 10% 0%, rgba(15,125,138,0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 100%, rgba(201,165,90,0.05) 0%, transparent 40%);
+}
+header{
+  background:var(--navy); color:var(--cream);
+  padding:18px 20px 0; border-bottom:3px solid var(--gold);
+  position:sticky; top:0; z-index:50;
+  box-shadow:0 4px 20px rgba(10,37,64,0.15);
+}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:36px;height:36px; border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:700;font-size:15px;
+  color:var(--gold);letter-spacing:-0.5px;
+}
+.brand h1{font-family:'Fraunces',serif;font-weight:500;font-size:20px;letter-spacing:-0.3px;line-height:1.1}
+.brand .sub{font-size:10px;color:var(--gold-light);letter-spacing:1.8px;text-transform:uppercase;margin-top:2px}
+.header-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{
+  background:transparent;border:1px solid rgba(228,201,137,0.3);
+  color:var(--gold-light);padding:7px 11px;font-size:11px;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+  font-family:inherit;font-weight:500;
+}
+.icon-btn:hover{background:rgba(228,201,137,0.1);color:var(--cream)}
+.tabs{
+  display:flex;border-bottom:1px solid rgba(228,201,137,0.2);
+  margin-left:-20px;margin-right:-20px;padding:0 20px;overflow-x:auto;scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  background:none;border:none;color:rgba(247,243,236,0.55);
+  padding:12px 0 12px 0;margin-right:24px;
+  font-size:11px;letter-spacing:1.4px;text-transform:uppercase;
+  font-weight:500;cursor:pointer;position:relative;white-space:nowrap;
+  font-family:inherit;
+}
+.tab.active{color:var(--gold-light)}
+.tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold)}
+main{padding:20px;padding-bottom:80px;max-width:1100px;margin:0 auto}
+.view{display:none}
+.view.active{display:block;animation:fadeIn 0.25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.view-title{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:var(--navy);margin-bottom:2px;letter-spacing:-0.4px}
+.view-sub{font-size:13px;color:var(--muted);margin-bottom:20px;font-style:italic}
+
+/* Buttons */
+.btn{
+  background:var(--navy);color:var(--cream);border:none;
+  padding:10px 18px;font-size:12px;letter-spacing:1.2px;
+  text-transform:uppercase;font-weight:500;cursor:pointer;
+  font-family:inherit;transition:background 0.15s;
+}
+.btn:hover{background:var(--navy-deep)}
+.btn.gold{background:var(--gold);color:var(--navy)}
+.btn.gold:hover{background:var(--gold-light)}
+.btn.teal{background:var(--teal);color:var(--cream)}
+.btn.teal:hover{background:var(--teal-light)}
+.btn.outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.outline:hover{background:var(--navy);color:var(--cream)}
+.btn.danger{background:var(--danger)}
+.btn.sm{padding:6px 12px;font-size:11px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* Cases list */
+.list-toolbar{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin-bottom:16px;flex-wrap:wrap;
+}
+.search-box{
+  flex:1;min-width:200px;display:flex;align-items:center;
+  background:white;border:1px solid var(--line);padding:0 12px;
+}
+.search-box input{
+  flex:1;border:none;outline:none;padding:10px 0;font-size:14px;
+  font-family:inherit;background:transparent;color:var(--ink);
+}
+.search-box .sicon{color:var(--muted);font-size:14px}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{
+  background:white;border:1px solid var(--line);
+  padding:6px 12px;font-size:11px;letter-spacing:0.8px;
+  text-transform:uppercase;cursor:pointer;color:var(--muted);
+  font-family:inherit;
+}
+.pill.active{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+
+.cases-grid{display:grid;gap:10px}
+.case-card{
+  background:white;border:1px solid var(--line);
+  padding:14px 16px;cursor:pointer;
+  display:grid;grid-template-columns:1fr auto;gap:8px;
+  border-left:3px solid var(--line);transition:transform 0.1s, border-color 0.15s;
+  position:relative;
+}
+.case-card:hover{border-left-color:var(--gold);transform:translateX(2px)}
+.case-card.planning{border-left-color:var(--teal-light)}
+.case-card.scheduled{border-left-color:var(--warning)}
+.case-card.operated{border-left-color:var(--success)}
+.case-name{font-family:'Fraunces',serif;font-size:17px;font-weight:500;color:var(--navy)}
+.case-meta{font-size:12px;color:var(--muted);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
+.case-meta span{display:inline-flex;align-items:center;gap:4px}
+.case-mrn{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal)}
+.case-status{
+  font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  padding:4px 8px;background:var(--cream);color:var(--navy);
+  align-self:start;font-weight:500;border:1px solid var(--line);
+}
+.case-status.planning{background:rgba(58,165,177,0.12);color:var(--teal);border-color:var(--teal-light)}
+.case-status.scheduled{background:rgba(184,116,31,0.12);color:var(--warning);border-color:#dba562}
+.case-status.operated{background:rgba(47,107,58,0.12);color:var(--success);border-color:#90b394}
+.case-snapshot{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--muted);margin-top:6px;letter-spacing:0.2px;
+}
+.case-snapshot b{color:var(--ink);font-weight:600}
+
+.empty{
+  text-align:center;padding:60px 20px;color:var(--muted);
+  border:1.5px dashed var(--line);background:white;
+}
+.empty h3{font-family:'Fraunces',serif;color:var(--navy);font-weight:500;font-size:20px;margin-bottom:6px}
+.empty p{font-size:13px;margin-bottom:16px}
+
+/* Case detail */
+.detail-header{
+  background:white;border:1px solid var(--line);
+  padding:18px 20px;margin-bottom:16px;position:relative;
+  border-top:3px solid var(--gold);
+}
+.detail-header .back{
+  background:none;border:none;color:var(--teal);
+  font-size:12px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;font-family:inherit;font-weight:500;padding:0 0 8px 0;
+}
+.detail-header h2{
+  font-family:'Fraunces',serif;font-size:24px;font-weight:500;
+  color:var(--navy);margin-bottom:4px;
+}
+.detail-header .dh-meta{
+  display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);
+  font-family:'IBM Plex Mono',monospace;letter-spacing:0.3px;
+}
+.detail-header .dh-meta span b{color:var(--navy);font-family:inherit;font-weight:600}
+.detail-actions{position:absolute;top:18px;right:20px;display:flex;gap:6px}
+
+/* Section card */
+.card{
+  background:white;border:1px solid var(--line);
+  margin-bottom:14px;
+}
+.card-head{
+  padding:14px 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(to right, rgba(15,125,138,0.04), transparent);
+}
+.card-head h3{
+  font-family:'Fraunces',serif;font-size:16px;font-weight:500;
+  color:var(--navy);letter-spacing:-0.2px;
+}
+.card-head .hint{font-size:11px;color:var(--muted);font-style:italic}
+.card-body{padding:16px 18px}
+
+/* Form fields */
+.row{display:grid;gap:12px;margin-bottom:12px}
+.row.r2{grid-template-columns:1fr 1fr}
+.row.r3{grid-template-columns:1fr 1fr 1fr}
+.row.r4{grid-template-columns:1fr 1fr 1fr 1fr}
+@media (max-width:680px){
+  .row.r2,.row.r3,.row.r4{grid-template-columns:1fr 1fr}
+}
+.field label{
+  display:block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--muted);font-weight:500;margin-bottom:4px;
+}
+.field input,.field select,.field textarea{
+  width:100%;border:1px solid var(--line);background:white;
+  padding:8px 10px;font-size:14px;font-family:inherit;color:var(--ink);
+  outline:none;transition:border 0.15s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--teal);
+}
+.field textarea{resize:vertical;min-height:60px;font-family:inherit}
+.field .unit{
+  position:relative;
+}
+.field .unit input{padding-right:34px}
+.field .unit::after{
+  content:attr(data-unit);position:absolute;right:10px;top:50%;
+  transform:translateY(-50%);font-size:11px;color:var(--muted);
+  pointer-events:none;font-family:'IBM Plex Mono',monospace;
+}
+.field input[type="number"]::-webkit-inner-spin-button,
+.field input[type="number"]::-webkit-outer-spin-button{
+  -webkit-appearance:none;margin:0;
+}
+.field input[type="number"]{-moz-appearance:textfield}
+.field-inline{display:flex;align-items:center;gap:8px}
+.field-inline input[type="checkbox"]{width:16px;height:16px;accent-color:var(--teal)}
+.field-inline label{margin:0;text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink);font-weight:400}
+
+/* Bilateral side panels */
+.sides{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.sides{grid-template-columns:1fr}}
+.side-panel{
+  border:1px solid var(--line);background:var(--paper);
+  padding:14px;position:relative;
+}
+.side-panel.L{border-top:3px solid var(--teal)}
+.side-panel.R{border-top:3px solid var(--gold)}
+.side-label{
+  font-family:'Fraunces',serif;font-size:14px;font-weight:600;
+  color:var(--navy);margin-bottom:10px;display:flex;align-items:center;
+  justify-content:space-between;
+}
+.side-tag{
+  font-size:10px;letter-spacing:1.4px;text-transform:uppercase;
+  padding:2px 7px;color:white;
+}
+.side-tag.L{background:var(--teal)}
+.side-tag.R{background:var(--gold);color:var(--navy)}
+
+/* Computed metrics */
+.metric-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:8px;margin-top:12px;
+}
+.metric{
+  background:white;border:1px solid var(--line);
+  padding:10px 12px;
+}
+.metric .ml{
+  font-size:9px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+}
+.metric .mv{
+  font-family:'Fraunces',serif;font-size:22px;font-weight:600;
+  color:var(--navy);margin-top:2px;letter-spacing:-0.5px;
+}
+.metric .mv .mu{font-size:11px;color:var(--muted);font-weight:400;margin-left:2px;font-family:'IBM Plex Mono',monospace}
+.metric.warn{border-top:2px solid var(--warning)}
+.metric.alert{border-top:2px solid var(--danger)}
+.metric.warn .mv{color:var(--warning)}
+.metric.alert .mv{color:var(--danger)}
+.metric.ok{border-top:2px solid var(--success)}
+
+/* Diagram */
+.diagram-wrap{
+  background:var(--cream);border:1px solid var(--line);
+  padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-top:12px;
+}
+@media (max-width:680px){.diagram-wrap{grid-template-columns:1fr}}
+.dia-box{background:white;border:1px solid var(--line);padding:8px;text-align:center}
+.dia-box .dia-title{
+  font-size:10px;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--muted);font-weight:500;margin-bottom:4px;
+}
+.dia-box svg{width:100%;height:auto;max-height:240px;display:block}
+
+/* Status select */
+.status-select{
+  display:inline-flex;border:1px solid var(--line);
+}
+.status-select button{
+  background:white;border:none;padding:6px 12px;font-size:11px;
+  letter-spacing:1px;text-transform:uppercase;cursor:pointer;
+  font-family:inherit;color:var(--muted);border-right:1px solid var(--line);
+}
+.status-select button:last-child{border-right:none}
+.status-select button.active{background:var(--navy);color:var(--cream)}
+
+/* Sub-tabs (within case detail) */
+.subtabs{
+  display:flex;gap:0;border-bottom:1px solid var(--line);
+  margin-bottom:14px;overflow-x:auto;scrollbar-width:none;
+}
+.subtabs::-webkit-scrollbar{display:none}
+.subtab{
+  background:none;border:none;padding:10px 16px;cursor:pointer;
+  font-family:inherit;font-size:12px;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--muted);font-weight:500;
+  border-bottom:2px solid transparent;white-space:nowrap;
+}
+.subtab.active{color:var(--navy);border-bottom-color:var(--gold)}
+
+.subview{display:none}
+.subview.active{display:block;animation:fadeIn 0.2s}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--navy);color:var(--cream);padding:10px 18px;
+  font-size:13px;letter-spacing:0.5px;z-index:100;
+  border-left:3px solid var(--gold);box-shadow:0 6px 24px rgba(0,0,0,0.2);
+  opacity:0;transition:opacity 0.2s;pointer-events:none;
+}
+.toast.show{opacity:1}
+.toast.error{border-left-color:var(--danger)}
+
+/* Reference panel */
+.ref-panel{
+  background:rgba(15,125,138,0.05);border-left:3px solid var(--teal);
+  padding:10px 14px;font-size:12px;color:var(--ink);margin-bottom:12px;
+}
+.ref-panel b{color:var(--teal);font-weight:600}
+.ref-panel ul{margin-top:4px;padding-left:18px;color:var(--muted)}
+.ref-panel li{margin-bottom:2px}
+
+/* Print */
+@media print{
+  body{background:white}
+  header,.detail-actions,.subtabs,.btn,.icon-btn,.list-toolbar,.case-card{display:none}
+  .view-title,.view-sub{display:none}
+  .subview{display:block !important}
+  main{padding:0;max-width:none}
+  .card,.detail-header{break-inside:avoid;border:1px solid #aaa;box-shadow:none}
+  .detail-header{background:white !important}
+  .print-only{display:block !important}
+}
+.print-only{display:none}
+
+/* Footer disclaimer */
+.disclaimer{
+  text-align:center;padding:14px;font-size:11px;color:var(--muted);
+  font-style:italic;border-top:1px solid var(--line);margin-top:30px;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-row">
+    <div class="brand">
+      <div class="brand-mark">VDR</div>
+      <div>
+        <h1>VDRO Planner</h1>
+        <div class="sub">Cerebral Palsy · Hip Reconstruction</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="exportAllBtn" title="Export all cases as JSON">Export</button>
+      <button class="icon-btn" id="importBtn" title="Import JSON">Import</button>
+      <input type="file" id="importFile" accept=".json" style="display:none">
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-view="cases">Cases</button>
+    <button class="tab" data-view="new">New Case</button>
+    <button class="tab" data-view="about">Reference</button>
+  </div>
+</header>
+
+<main>
+  <!-- CASES LIST -->
+  <section id="view-cases" class="view active">
+    <div class="view-title">Cases</div>
+    <div class="view-sub">Pre-op planning for varus derotation osteotomy</div>
+
+    <div class="list-toolbar">
+      <div class="search-box">
+        <span class="sicon">⌕</span>
+        <input type="search" id="searchInput" placeholder="Search name or MRN…">
+      </div>
+      <div class="filter-pills" id="statusFilter">
+        <button class="pill active" data-status="all">All</button>
+        <button class="pill" data-status="planning">Planning</button>
+        <button class="pill" data-status="scheduled">Scheduled</button>
+        <button class="pill" data-status="operated">Operated</button>
+      </div>
+      <button class="btn gold" id="newCaseBtn">+ New Case</button>
+    </div>
+
+    <div id="casesList" class="cases-grid"></div>
+  </section>
+
+  <!-- NEW CASE / CASE DETAIL -->
+  <section id="view-case" class="view">
+    <div class="detail-header">
+      <button class="back" id="backBtn">← Back to cases</button>
+      <div class="detail-actions">
+        <button class="btn sm outline" id="printBtn">Print</button>
+        <button class="btn sm danger" id="deleteBtn">Delete</button>
+      </div>
+      <h2 id="caseTitle">New Case</h2>
+      <div class="dh-meta" id="caseMeta"></div>
+    </div>
+
+    <div class="subtabs">
+      <button class="subtab active" data-sub="demographics">Demographics</button>
+      <button class="subtab" data-sub="clinical">Clinical</button>
+      <button class="subtab" data-sub="imaging">Imaging</button>
+      <button class="subtab" data-sub="plan">VDRO Plan</button>
+      <button class="subtab" data-sub="notes">Notes &amp; Summary</button>
+    </div>
+
+    <!-- DEMOGRAPHICS -->
+    <div class="subview active" id="sub-demographics">
+      <div class="card">
+        <div class="card-head"><h3>Patient</h3></div>
+        <div class="card-body">
+          <div class="row r3">
+            <div class="field"><label>MRN</label><input type="text" data-bind="mrn" placeholder="e.g. 1234567"></div>
+            <div class="field"><label>Name</label><input type="text" data-bind="name" placeholder="Full name"></div>
+            <div class="field"><label>Date of birth</label><input type="date" data-bind="dob"></div>
+          </div>
+          <div class="row r3">
+            <div class="field"><label>Sex</label>
+              <select data-bind="sex">
+                <option value="">—</option><option>Male</option><option>Female</option>
+              </select>
+            </div>
+            <div class="field"><label>GMFCS</label>
+              <select data-bind="gmfcs">
+                <option value="">—</option>
+                <option value="I">I — walks without limitations</option>
+                <option value="II">II — walks with limitations</option>
+                <option value="III">III — walks using hand-held mobility</option>
+                <option value="IV">IV — self-mobility with limits; powered mobility</option>
+                <option value="V">V — transported in manual wheelchair</option>
+              </select>
+            </div>
+            <div class="field"><label>CP topography</label>
+              <select data-bind="cpType">
+                <option value="">—</option>
+                <option>Spastic diplegia</option>
+                <option>Spastic quadriplegia</option>
+                <option>Spastic hemiplegia</option>
+                <option>Dyskinetic / dystonic</option>
+                <option>Mixed</option>
+                <option>Other neuromuscular</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Surgery</h3></div>
+        <div class="card-body">
+          <div class="row r3">
+            <div class="field"><label>Operative side</label>
+              <select data-bind="side">
+                <option value="">—</option>
+                <option value="L">Left</option>
+                <option value="R">Right</option>
+                <option value="Bilateral">Bilateral</option>
+              </select>
+            </div>
+            <div class="field"><label>Planned surgery date</label><input type="date" data-bind="surgeryDate"></div>
+            <div class="field"><label>Status</label>
+              <select data-bind="status">
+                <option value="planning">Planning</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="operated">Operated</option>
+              </select>
+            </div>
+          </div>
+          <div class="row r2">
+            <div class="field"><label>Surgeon</label><input type="text" data-bind="surgeon" placeholder="Primary surgeon"></div>
+            <div class="field"><label>Facility</label><input type="text" data-bind="facility" placeholder="e.g. KFSHRC"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLINICAL -->
+    <div class="subview" id="sub-clinical">
+      <div class="ref-panel">
+        <b>Hip examination</b> — record passive ROM with patient supine; abduction with hip extended (knees ext) vs. flexed; rotations in 90° flexion.
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Hip range of motion</h3><span class="hint">degrees</span></div>
+        <div class="card-body">
+          <div class="sides">
+            <div class="side-panel L">
+              <div class="side-label">Left <span class="side-tag L">L</span></div>
+              <div class="row r2">
+                <div class="field"><label>Abduction (hip ext)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.abdExt_L"></div></div>
+                <div class="field"><label>Abduction (hip flex)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.abdFlex_L"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Internal rotation</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.IR_L"></div></div>
+                <div class="field"><label>External rotation</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.ER_L"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Popliteal angle</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.popl_L"></div></div>
+                <div class="field"><label>Thomas test (flex contr.)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.thomas_L"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Ashworth (adductors)</label>
+                  <select data-bind="cl.ash_L"><option value="">—</option><option>0</option><option>1</option><option>1+</option><option>2</option><option>3</option><option>4</option></select>
+                </div>
+                <div class="field"><label>Trochanteric prominence (est. AV)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.tpt_L"></div></div>
+              </div>
+            </div>
+
+            <div class="side-panel R">
+              <div class="side-label">Right <span class="side-tag R">R</span></div>
+              <div class="row r2">
+                <div class="field"><label>Abduction (hip ext)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.abdExt_R"></div></div>
+                <div class="field"><label>Abduction (hip flex)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.abdFlex_R"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Internal rotation</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.IR_R"></div></div>
+                <div class="field"><label>External rotation</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.ER_R"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Popliteal angle</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.popl_R"></div></div>
+                <div class="field"><label>Thomas test (flex contr.)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.thomas_R"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Ashworth (adductors)</label>
+                  <select data-bind="cl.ash_R"><option value="">—</option><option>0</option><option>1</option><option>1+</option><option>2</option><option>3</option><option>4</option></select>
+                </div>
+                <div class="field"><label>Trochanteric prominence (est. AV)</label><div class="unit" data-unit="°"><input type="number" data-bind="cl.tpt_R"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row r2" style="margin-top:14px">
+            <div class="field"><label>Sitting balance / windswept</label>
+              <select data-bind="cl.windswept">
+                <option value="">—</option><option>Balanced</option><option>Windswept R</option><option>Windswept L</option>
+              </select>
+            </div>
+            <div class="field"><label>Spine</label>
+              <select data-bind="cl.spine">
+                <option value="">—</option><option>Straight</option><option>Scoliosis (mild)</option><option>Scoliosis (moderate)</option><option>Scoliosis (severe)</option><option>Post-fusion</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGING -->
+    <div class="subview" id="sub-imaging">
+      <div class="ref-panel">
+        <b>AP pelvis measurements</b> — Reimers MP (% femoral head lateral to Perkins line), Acetabular Index (Hilgenreiner line vs. roof), Neck-Shaft Angle on x-ray. Pelvic obliquity measured from horizontal.
+        <ul>
+          <li>Normal MP &lt; 33% · at-risk 33-40% · displaced &gt; 40% · subluxed &gt; 50% · dislocated &gt; 90%</li>
+          <li>NSA child norm 135-145° · CP coxa valga commonly 150-170°</li>
+          <li>AI norm &lt; 25° (age &lt; 4), &lt; 20° older</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>X-ray date</h3></div>
+        <div class="card-body">
+          <div class="row r2">
+            <div class="field"><label>AP pelvis date</label><input type="date" data-bind="img.xrayDate"></div>
+            <div class="field"><label>Pelvic obliquity</label><div class="unit" data-unit="°"><input type="number" data-bind="img.pelvicObl"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Radiographic measurements</h3></div>
+        <div class="card-body">
+          <div class="sides">
+            <div class="side-panel L">
+              <div class="side-label">Left <span class="side-tag L">L</span></div>
+              <div class="row r2">
+                <div class="field"><label>Reimers MP</label><div class="unit" data-unit="%"><input type="number" data-bind="img.MP_L" min="0" max="100"></div></div>
+                <div class="field"><label>Acetabular index</label><div class="unit" data-unit="°"><input type="number" data-bind="img.AI_L"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Neck-shaft angle</label><div class="unit" data-unit="°"><input type="number" data-bind="img.NSA_L"></div></div>
+                <div class="field"><label>Head-shaft angle</label><div class="unit" data-unit="°"><input type="number" data-bind="img.HSA_L"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>CT anteversion</label><div class="unit" data-unit="°"><input type="number" data-bind="img.AV_L"></div></div>
+                <div class="field"><label>Sharp / Tönnis</label><div class="unit" data-unit="°"><input type="number" data-bind="img.sharp_L"></div></div>
+              </div>
+            </div>
+            <div class="side-panel R">
+              <div class="side-label">Right <span class="side-tag R">R</span></div>
+              <div class="row r2">
+                <div class="field"><label>Reimers MP</label><div class="unit" data-unit="%"><input type="number" data-bind="img.MP_R" min="0" max="100"></div></div>
+                <div class="field"><label>Acetabular index</label><div class="unit" data-unit="°"><input type="number" data-bind="img.AI_R"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Neck-shaft angle</label><div class="unit" data-unit="°"><input type="number" data-bind="img.NSA_R"></div></div>
+                <div class="field"><label>Head-shaft angle</label><div class="unit" data-unit="°"><input type="number" data-bind="img.HSA_R"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>CT anteversion</label><div class="unit" data-unit="°"><input type="number" data-bind="img.AV_R"></div></div>
+                <div class="field"><label>Sharp / Tönnis</label><div class="unit" data-unit="°"><input type="number" data-bind="img.sharp_R"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="metric-grid" id="imagingMetrics"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN -->
+    <div class="subview" id="sub-plan">
+      <div class="ref-panel">
+        <b>VDRO targets</b> — varus correction = current NSA − target NSA (typically 100-120°). Derotation = current anteversion − target (~15-20°). Choose blade plate so the blade lies along the femoral neck axis at the planned post-op NSA.
+        <ul>
+          <li>Predicted post-op MP is an empirical estimate (≈ 0.7–1% reduction per degree of varus) and depends on acetabular dysplasia.</li>
+          <li>Add a pelvic procedure (Dega / San Diego / Salter / Pemberton) when AI &gt; 25° or residual MP after VDRO would remain &gt; 25-30%.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>VDRO plan</h3></div>
+        <div class="card-body">
+          <div class="sides">
+            <!-- LEFT PLAN -->
+            <div class="side-panel L">
+              <div class="side-label">Left
+                <span><label class="field-inline" style="margin:0"><input type="checkbox" data-bind="pL.vdro"> Plan VDRO</label></span>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Current NSA</label><div class="unit" data-unit="°"><input type="number" data-bind="pL.curNSA" data-mirror="img.NSA_L"></div></div>
+                <div class="field"><label>Target NSA</label><div class="unit" data-unit="°"><input type="number" data-bind="pL.tgtNSA" value="110"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Current anteversion</label><div class="unit" data-unit="°"><input type="number" data-bind="pL.curAV" data-mirror="img.AV_L"></div></div>
+                <div class="field"><label>Target anteversion</label><div class="unit" data-unit="°"><input type="number" data-bind="pL.tgtAV" value="15"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Shortening</label><div class="unit" data-unit="mm"><input type="number" data-bind="pL.short"></div></div>
+                <div class="field"><label>Blade plate angle</label>
+                  <select data-bind="pL.plate">
+                    <option value="">—</option><option>90°</option><option>100°</option><option>110°</option><option>120°</option><option>130°</option>
+                    <option>Locking — paediatric</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="metric-grid" id="planMetricsL"></div>
+
+              <div style="margin-top:14px">
+                <label style="display:block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:8px">Adjunct procedures</label>
+                <div class="row r2">
+                  <div class="field field-inline"><input type="checkbox" data-bind="pL.adductor"><label>Adductor tenotomy</label></div>
+                  <div class="field field-inline"><input type="checkbox" data-bind="pL.psoas"><label>Psoas release</label></div>
+                </div>
+                <div class="row r2">
+                  <div class="field field-inline"><input type="checkbox" data-bind="pL.hamstring"><label>Hamstring lengthening</label></div>
+                  <div class="field field-inline"><input type="checkbox" data-bind="pL.gastroc"><label>Gastroc / Achilles</label></div>
+                </div>
+                <div class="row r2">
+                  <div class="field"><label>Pelvic procedure</label>
+                    <select data-bind="pL.pelvic">
+                      <option value="">None</option>
+                      <option>Dega</option><option>San Diego</option><option>Salter</option><option>Pemberton</option><option>Chiari</option><option>Triple (Steel)</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Pelvic correction</label><div class="unit" data-unit="°"><input type="number" data-bind="pL.pelvAng"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT PLAN -->
+            <div class="side-panel R">
+              <div class="side-label">Right
+                <span><label class="field-inline" style="margin:0"><input type="checkbox" data-bind="pR.vdro"> Plan VDRO</label></span>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Current NSA</label><div class="unit" data-unit="°"><input type="number" data-bind="pR.curNSA" data-mirror="img.NSA_R"></div></div>
+                <div class="field"><label>Target NSA</label><div class="unit" data-unit="°"><input type="number" data-bind="pR.tgtNSA" value="110"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Current anteversion</label><div class="unit" data-unit="°"><input type="number" data-bind="pR.curAV" data-mirror="img.AV_R"></div></div>
+                <div class="field"><label>Target anteversion</label><div class="unit" data-unit="°"><input type="number" data-bind="pR.tgtAV" value="15"></div></div>
+              </div>
+              <div class="row r2">
+                <div class="field"><label>Shortening</label><div class="unit" data-unit="mm"><input type="number" data-bind="pR.short"></div></div>
+                <div class="field"><label>Blade plate angle</label>
+                  <select data-bind="pR.plate">
+                    <option value="">—</option><option>90°</option><option>100°</option><option>110°</option><option>120°</option><option>130°</option>
+                    <option>Locking — paediatric</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="metric-grid" id="planMetricsR"></div>
+
+              <div style="margin-top:14px">
+                <label style="display:block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:8px">Adjunct procedures</label>
+                <div class="row r2">
+                  <div class="field field-inline"><input type="checkbox" data-bind="pR.adductor"><label>Adductor tenotomy</label></div>
+                  <div class="field field-inline"><input type="checkbox" data-bind="pR.psoas"><label>Psoas release</label></div>
+                </div>
+                <div class="row r2">
+                  <div class="field field-inline"><input type="checkbox" data-bind="pR.hamstring"><label>Hamstring lengthening</label></div>
+                  <div class="field field-inline"><input type="checkbox" data-bind="pR.gastroc"><label>Gastroc / Achilles</label></div>
+                </div>
+                <div class="row r2">
+                  <div class="field"><label>Pelvic procedure</label>
+                    <select data-bind="pR.pelvic">
+                      <option value="">None</option>
+                      <option>Dega</option><option>San Diego</option><option>Salter</option><option>Pemberton</option><option>Chiari</option><option>Triple (Steel)</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Pelvic correction</label><div class="unit" data-unit="°"><input type="number" data-bind="pR.pelvAng"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="diagram-wrap" id="diagramWrap"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="subview" id="sub-notes">
+      <div class="card">
+        <div class="card-head"><h3>Plan summary</h3><span class="hint">auto-generated · editable</span></div>
+        <div class="card-body">
+          <div id="autoSummary" style="font-size:13px;line-height:1.7;background:var(--paper);border:1px solid var(--line);padding:14px;margin-bottom:12px;font-family:'IBM Plex Mono',monospace;white-space:pre-wrap"></div>
+          <div class="field">
+            <label>Additional notes</label>
+            <textarea data-bind="notes" rows="5" placeholder="Family discussion, equipment requests, anaesthetic concerns, post-op plan…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card print-only">
+        <div class="card-head"><h3>Disclaimer</h3></div>
+        <div class="card-body">
+          <p style="font-size:11px;color:var(--muted)">This plan is an aid to the surgeon. Final intra-operative measurements (fluoroscopic NSA, head positioning, soft-tissue tension) supersede planned values. Not a substitute for clinical judgment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / REFERENCE -->
+  <section id="view-about" class="view">
+    <div class="view-title">Reference</div>
+    <div class="view-sub">Measurement definitions and planning rules of thumb</div>
+
+    <div class="card">
+      <div class="card-head"><h3>Radiographic measurements</h3></div>
+      <div class="card-body" style="font-size:13px;line-height:1.7">
+        <p><b>Reimers Migration Percentage (MP)</b> — On AP pelvis, percentage of femoral head lateral to Perkins line. Hip surveillance threshold: &gt; 30% triggers concern, &gt; 40% commonly indicates reconstruction (CPUP / AACPDM guideline).</p>
+        <p><b>Acetabular Index (AI)</b> — Angle between Hilgenreiner line and acetabular roof. &gt; 30° usually indicates a pelvic procedure is needed in addition to VDRO.</p>
+        <p><b>Neck-Shaft Angle (NSA)</b> — Coronal-plane angle of femoral neck axis to shaft. Normal child 135-145°; in CP often 150-170° (coxa valga). Goal post-op 100-120°.</p>
+        <p><b>Head-Shaft Angle (HSA)</b> — Angle from physeal axis to shaft; valgus capital remodeling indicator (Bauer / Robin).</p>
+        <p><b>Anteversion</b> — Anterior tilt of femoral neck. Normal child ~30° decreasing to ~15° adult; CP often 50-70°. CT (Murphy/Reikerås) or clinical (Ryder / trochanteric prominence) test.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>VDRO planning rules of thumb</h3></div>
+      <div class="card-body" style="font-size:13px;line-height:1.7">
+        <p><b>Varus correction</b> = current NSA − target NSA. A lateral closing wedge of that magnitude is removed from the inter/subtrochanteric region.</p>
+        <p><b>Derotation</b> = current AV − target AV. Performed by externally rotating distal fragment after the osteotomy.</p>
+        <p><b>Blade plate selection</b> — pick a plate angle so the blade sits along the femoral neck axis with the side plate flush on the lateral shaft after correction. For a target NSA of 110°, a 90° blade plate is commonly used.</p>
+        <p><b>Predicted MP reduction</b> — estimate ≈ 0.7-1% MP reduction per 1° of varus, capped by acetabular coverage. If AI &gt; 25° or predicted MP &gt; 25%, add a pelvic procedure.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>Data &amp; privacy</h3></div>
+      <div class="card-body" style="font-size:13px;line-height:1.7">
+        <p>All cases are stored locally in your browser (<code>localStorage</code>). Nothing is sent to a server. Use <i>Export</i> in the header to back up to JSON.</p>
+        <p style="color:var(--muted);font-style:italic;margin-top:8px">Demo / planning aid only — not a regulated medical device.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    Planning aid only · Final correction determined intra-operatively · Not a substitute for clinical judgment
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============== STATE ==============
+const STORAGE_KEY = 'vdro-planner-cases-v1';
+let state = {
+  cases: [],
+  currentId: null,
+  filter: 'all',
+  search: '',
+};
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ state.cases = JSON.parse(raw) || []; }
+  }catch(e){ console.error(e); state.cases = []; }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.cases));
+}
+
+function uid(){ return 'c_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function ageFromDob(dob){
+  if(!dob) return null;
+  const d = new Date(dob), now = new Date();
+  let y = now.getFullYear()-d.getFullYear();
+  const m = now.getMonth()-d.getMonth();
+  if(m<0 || (m===0 && now.getDate()<d.getDate())) y--;
+  return y;
+}
+function blankCase(){
+  return {
+    id: uid(), createdAt: today(), updatedAt: today(),
+    mrn:'', name:'', dob:'', sex:'', gmfcs:'', cpType:'',
+    side:'', surgeryDate:'', status:'planning', surgeon:'', facility:'',
+    cl:{}, img:{},
+    pL:{ vdro:false, tgtNSA:110, tgtAV:15 },
+    pR:{ vdro:false, tgtNSA:110, tgtAV:15 },
+    notes:'',
+  };
+}
+
+// ============== HELPERS ==============
+function get(obj, path){
+  const parts = path.split('.');
+  let o = obj;
+  for(const p of parts){ if(o==null) return undefined; o = o[p]; }
+  return o;
+}
+function set(obj, path, v){
+  const parts = path.split('.');
+  let o = obj;
+  for(let i=0;i<parts.length-1;i++){
+    if(o[parts[i]] == null || typeof o[parts[i]] !== 'object') o[parts[i]] = {};
+    o = o[parts[i]];
+  }
+  o[parts[parts.length-1]] = v;
+}
+function num(v){
+  if(v===''||v==null) return null;
+  const n = parseFloat(v);
+  return isNaN(n) ? null : n;
+}
+function fmt(v, unit){
+  if(v==null||isNaN(v)) return '—';
+  const rounded = Math.abs(v) < 10 ? v.toFixed(1) : Math.round(v);
+  return rounded + (unit? '<span class="mu">'+unit+'</span>' : '');
+}
+function toast(msg, isErr){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', !!isErr);
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+// ============== VIEW SWITCHING ==============
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el = document.getElementById('view-'+name);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.view===name);
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function showSub(name){
+  document.querySelectorAll('.subview').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sub-'+name).classList.add('active');
+  document.querySelectorAll('.subtab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.sub===name);
+  });
+}
+
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    if(t.dataset.view==='new'){ openCase(null); return; }
+    showView(t.dataset.view);
+  });
+});
+document.querySelectorAll('.subtab').forEach(t=>{
+  t.addEventListener('click', ()=>showSub(t.dataset.sub));
+});
+
+// ============== CASES LIST ==============
+function renderList(){
+  const list = document.getElementById('casesList');
+  const q = state.search.toLowerCase();
+  let items = state.cases.slice().sort((a,b)=>(b.updatedAt||'').localeCompare(a.updatedAt||''));
+  if(state.filter!=='all') items = items.filter(c=>c.status===state.filter);
+  if(q) items = items.filter(c=>
+    (c.name||'').toLowerCase().includes(q) ||
+    (c.mrn||'').toLowerCase().includes(q)
+  );
+
+  if(items.length===0){
+    list.innerHTML = `
+      <div class="empty">
+        <h3>No cases yet</h3>
+        <p>Start a new VDRO plan to begin tracking.</p>
+        <button class="btn gold" onclick="openCase(null)">+ New Case</button>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(c=>{
+    const age = ageFromDob(c.dob);
+    const snap = renderSnapshot(c);
+    return `
+      <div class="case-card ${c.status||'planning'}" onclick="openCase('${c.id}')">
+        <div>
+          <div class="case-name">${escape(c.name||'(no name)')}</div>
+          <div class="case-meta">
+            <span class="case-mrn">${escape(c.mrn||'—')}</span>
+            <span>· ${age!=null? age+'y':'—'} ${c.sex? '· '+escape(c.sex):''}</span>
+            <span>· GMFCS ${c.gmfcs||'—'}</span>
+            <span>· ${escape(c.side||'—')}</span>
+            ${c.surgeryDate? '<span>· '+escape(c.surgeryDate)+'</span>':''}
+          </div>
+          <div class="case-snapshot">${snap}</div>
+        </div>
+        <div class="case-status ${c.status||'planning'}">${escape(c.status||'planning')}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderSnapshot(c){
+  const parts = [];
+  const mp_l = num(c.img?.MP_L), mp_r = num(c.img?.MP_R);
+  const nsa_l = num(c.img?.NSA_L), nsa_r = num(c.img?.NSA_R);
+  if(mp_l!=null) parts.push(`<b>MP L</b> ${mp_l}%`);
+  if(mp_r!=null) parts.push(`<b>MP R</b> ${mp_r}%`);
+  if(nsa_l!=null) parts.push(`<b>NSA L</b> ${nsa_l}°`);
+  if(nsa_r!=null) parts.push(`<b>NSA R</b> ${nsa_r}°`);
+  if(c.pL?.vdro) parts.push('<b>VDRO L</b>');
+  if(c.pR?.vdro) parts.push('<b>VDRO R</b>');
+  return parts.join(' · ') || '<span style="color:var(--muted)">No measurements yet</span>';
+}
+
+function escape(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, m=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[m]));
+}
+
+// ============== CASE EDITOR ==============
+function openCase(id){
+  if(id){
+    state.currentId = id;
+  } else {
+    const nc = blankCase();
+    state.cases.push(nc);
+    state.currentId = nc.id;
+    saveState();
+  }
+  showView('case');
+  showSub('demographics');
+  bindForm();
+  renderHeader();
+  renderImagingMetrics();
+  renderPlanMetrics();
+  renderDiagrams();
+  renderSummary();
+}
+
+function currentCase(){
+  return state.cases.find(c=>c.id===state.currentId);
+}
+
+function bindForm(){
+  const c = currentCase();
+  if(!c) return;
+  document.querySelectorAll('[data-bind]').forEach(el=>{
+    const path = el.dataset.bind;
+    const v = get(c, path);
+    if(el.type==='checkbox'){
+      el.checked = !!v;
+    } else {
+      el.value = (v==null) ? '' : v;
+    }
+    // attach listener once
+    if(!el._bound){
+      el._bound = true;
+      const ev = (el.tagName==='SELECT' || el.type==='checkbox' || el.type==='date') ? 'change' : 'input';
+      el.addEventListener(ev, ()=>{
+        const c = currentCase();
+        if(!c) return;
+        let v;
+        if(el.type==='checkbox') v = el.checked;
+        else if(el.type==='number'){ v = el.value===''? '' : el.value; }
+        else v = el.value;
+        set(c, path, v);
+        c.updatedAt = today();
+        // Mirror imaging → plan
+        if(path==='img.NSA_L' && !get(c,'pL.curNSA')) set(c,'pL.curNSA',v);
+        if(path==='img.NSA_R' && !get(c,'pR.curNSA')) set(c,'pR.curNSA',v);
+        if(path==='img.AV_L' && !get(c,'pL.curAV')) set(c,'pL.curAV',v);
+        if(path==='img.AV_R' && !get(c,'pR.curAV')) set(c,'pR.curAV',v);
+        // re-bind mirrored fields
+        document.querySelectorAll('[data-mirror]').forEach(m=>{
+          if(m.dataset.mirror===path && (!m.value || m.value==='')) m.value = v;
+        });
+        saveState();
+        renderHeader();
+        renderImagingMetrics();
+        renderPlanMetrics();
+        renderDiagrams();
+        renderSummary();
+      });
+    }
+  });
+}
+
+function renderHeader(){
+  const c = currentCase();
+  if(!c) return;
+  document.getElementById('caseTitle').textContent = c.name || '(unnamed case)';
+  const age = ageFromDob(c.dob);
+  const parts = [
+    c.mrn? `<span><b>MRN</b> ${escape(c.mrn)}</span>`:'',
+    age!=null? `<span><b>Age</b> ${age}y</span>`:'',
+    c.sex? `<span>${escape(c.sex)}</span>`:'',
+    c.gmfcs? `<span><b>GMFCS</b> ${escape(c.gmfcs)}</span>`:'',
+    c.side? `<span><b>Side</b> ${escape(c.side)}</span>`:'',
+    c.surgeryDate? `<span><b>Surgery</b> ${escape(c.surgeryDate)}</span>`:'',
+    `<span><b>Status</b> ${escape(c.status||'planning')}</span>`,
+  ].filter(Boolean);
+  document.getElementById('caseMeta').innerHTML = parts.join('');
+}
+
+// ============== CALCULATIONS ==============
+function mpClass(mp){
+  if(mp==null) return '';
+  if(mp >= 50) return 'alert';
+  if(mp >= 33) return 'warn';
+  return 'ok';
+}
+function aiClass(ai){
+  if(ai==null) return '';
+  if(ai >= 30) return 'alert';
+  if(ai >= 25) return 'warn';
+  return 'ok';
+}
+function nsaClass(nsa){
+  if(nsa==null) return '';
+  if(nsa >= 155) return 'alert';
+  if(nsa >= 145) return 'warn';
+  return 'ok';
+}
+
+function renderImagingMetrics(){
+  const c = currentCase();
+  if(!c) return;
+  const el = document.getElementById('imagingMetrics');
+  if(!el) return;
+  const m = c.img || {};
+  const mp_l = num(m.MP_L), mp_r = num(m.MP_R);
+  const ai_l = num(m.AI_L), ai_r = num(m.AI_R);
+  const nsa_l = num(m.NSA_L), nsa_r = num(m.NSA_R);
+  el.innerHTML = `
+    <div class="metric ${mpClass(mp_l)}"><div class="ml">MP — Left</div><div class="mv">${fmt(mp_l,'%')}</div></div>
+    <div class="metric ${mpClass(mp_r)}"><div class="ml">MP — Right</div><div class="mv">${fmt(mp_r,'%')}</div></div>
+    <div class="metric ${aiClass(ai_l)}"><div class="ml">AI — Left</div><div class="mv">${fmt(ai_l,'°')}</div></div>
+    <div class="metric ${aiClass(ai_r)}"><div class="ml">AI — Right</div><div class="mv">${fmt(ai_r,'°')}</div></div>
+    <div class="metric ${nsaClass(nsa_l)}"><div class="ml">NSA — Left</div><div class="mv">${fmt(nsa_l,'°')}</div></div>
+    <div class="metric ${nsaClass(nsa_r)}"><div class="ml">NSA — Right</div><div class="mv">${fmt(nsa_r,'°')}</div></div>
+  `;
+}
+
+function planCalc(plan, mpCurrent){
+  const cur = num(plan?.curNSA);
+  const tgt = num(plan?.tgtNSA);
+  const cav = num(plan?.curAV);
+  const tav = num(plan?.tgtAV);
+  const varus = (cur!=null && tgt!=null) ? (cur - tgt) : null;
+  const derot = (cav!=null && tav!=null) ? (cav - tav) : null;
+  // Empirical MP reduction: ~0.85% per degree varus (range cited 0.7-1)
+  let predMP = null;
+  if(mpCurrent!=null && varus!=null && varus>0){
+    predMP = Math.max(0, mpCurrent - varus * 0.85);
+  } else if(mpCurrent!=null && (varus==null || varus<=0)){
+    predMP = mpCurrent;
+  }
+  return { varus, derot, predMP };
+}
+
+function renderPlanMetrics(){
+  const c = currentCase(); if(!c) return;
+  ['L','R'].forEach(side=>{
+    const planKey = side==='L'?'pL':'pR';
+    const mp = num(c.img?.['MP_'+side]);
+    const r = planCalc(c[planKey], mp);
+    const el = document.getElementById('planMetrics'+side);
+    if(!el) return;
+    const varusCls = (r.varus!=null && r.varus<0) ? 'alert' : (r.varus!=null && r.varus>40 ? 'warn':'ok');
+    const predCls = mpClass(r.predMP);
+    el.innerHTML = `
+      <div class="metric ${varusCls}"><div class="ml">Varus correction</div><div class="mv">${fmt(r.varus,'°')}</div></div>
+      <div class="metric"><div class="ml">Derotation (IR)</div><div class="mv">${fmt(r.derot,'°')}</div></div>
+      <div class="metric ${predCls}"><div class="ml">Predicted post-op MP</div><div class="mv">${fmt(r.predMP,'%')}</div></div>
+    `;
+  });
+}
+
+// ============== DIAGRAM ==============
+function renderDiagrams(){
+  const c = currentCase(); if(!c) return;
+  const wrap = document.getElementById('diagramWrap');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  ['L','R'].forEach(side=>{
+    const planKey = side==='L'?'pL':'pR';
+    const cur = num(c[planKey]?.curNSA);
+    const tgt = num(c[planKey]?.tgtNSA);
+    if(cur==null && tgt==null) return;
+    const box = document.createElement('div');
+    box.className = 'dia-box';
+    box.innerHTML = `<div class="dia-title">${side==='L'?'Left':'Right'} femur · pre → post</div>` + femurSVG(cur, tgt);
+    wrap.appendChild(box);
+  });
+  if(!wrap.innerHTML){
+    wrap.innerHTML = '<div style="grid-column:1/-1;text-align:center;font-size:12px;color:var(--muted);font-style:italic;padding:20px">Enter NSA values to render the osteotomy diagram</div>';
+  }
+}
+
+function femurSVG(curNSA, tgtNSA){
+  // Render a schematic AP femur. Shaft vertical; neck angled at NSA off the shaft (medial side).
+  // Pre: gray neck at curNSA. Post: gold neck at tgtNSA. Wedge in red.
+  const W = 240, H = 240;
+  const sx = W/2, sy = H - 20; // shaft bottom center
+  const shaftTop = 80;
+  const neckLen = 64;
+  const headR = 16;
+  function neckPath(angleDeg){
+    // shaft axis points UP (negative Y). Neck angles MEDIALLY (to the left, negative X), forming the NSA on the medial side.
+    // Geometry: neck direction from shaft axis (up) rotated by (180-angle) toward medial.
+    const a = angleDeg * Math.PI/180;
+    // Shaft up = (0,-1). Rotate clockwise by (180-NSA) for medial neck.
+    const rot = (180 - angleDeg) * Math.PI/180;
+    const dx = -Math.sin(rot); // medial is -X
+    const dy = -Math.cos(rot); // upward is -Y
+    return { x: sx + dx*neckLen, y: shaftTop + dy*neckLen, dx, dy };
+  }
+  const pre = neckPath(curNSA || 140);
+  const post = neckPath(tgtNSA || 110);
+
+  const showPre = curNSA!=null;
+  const showPost = tgtNSA!=null;
+  const varus = (curNSA!=null && tgtNSA!=null) ? (curNSA - tgtNSA) : null;
+
+  // wedge visualization at subtrochanteric (just below shaftTop)
+  let wedge = '';
+  if(varus!=null && varus>0){
+    const wedgeY = shaftTop + 30;
+    const halfBase = Math.min(28, 2 + varus*0.6);
+    wedge = `
+      <polygon points="${sx},${wedgeY} ${sx-halfBase},${wedgeY+18} ${sx+halfBase},${wedgeY+18}"
+        fill="rgba(164,52,29,0.18)" stroke="${'#a4341d'}" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="${sx+halfBase+4}" y="${wedgeY+14}" font-size="10" fill="#a4341d" font-family="IBM Plex Mono, monospace">${varus.toFixed(0)}°</text>
+    `;
+  }
+
+  return `
+    <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <!-- shaft -->
+      <line x1="${sx}" y1="${shaftTop}" x2="${sx}" y2="${sy}" stroke="#1a2332" stroke-width="6" stroke-linecap="round"/>
+      <!-- greater trochanter (rough triangle on lateral) -->
+      <path d="M ${sx} ${shaftTop} L ${sx+14} ${shaftTop-6} L ${sx+10} ${shaftTop+10} Z" fill="#1a2332"/>
+
+      ${showPre ? `
+        <line x1="${sx}" y1="${shaftTop}" x2="${pre.x}" y2="${pre.y}" stroke="#9ca3af" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="${pre.x}" cy="${pre.y}" r="${headR}" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-dasharray="4,3"/>
+        <text x="${pre.x-8}" y="${pre.y-headR-4}" font-size="10" fill="#6b7280" font-family="IBM Plex Mono, monospace">pre ${(curNSA).toFixed(0)}°</text>
+      ` : ''}
+
+      ${showPost ? `
+        <line x1="${sx}" y1="${shaftTop}" x2="${post.x}" y2="${post.y}" stroke="${'#c9a55a'}" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="${post.x}" cy="${post.y}" r="${headR}" fill="#e4c989" stroke="#c9a55a" stroke-width="2"/>
+        <text x="${post.x-12}" y="${post.y+headR+12}" font-size="10" fill="#0a2540" font-weight="600" font-family="IBM Plex Mono, monospace">post ${(tgtNSA).toFixed(0)}°</text>
+      ` : ''}
+
+      ${wedge}
+
+      <!-- shaft axis dashed -->
+      <line x1="${sx}" y1="${shaftTop}" x2="${sx}" y2="${shaftTop-30}" stroke="#bbb" stroke-width="1" stroke-dasharray="2,3"/>
+    </svg>
+  `;
+}
+
+// ============== SUMMARY ==============
+function renderSummary(){
+  const c = currentCase(); if(!c) return;
+  const el = document.getElementById('autoSummary');
+  if(!el) return;
+  const age = ageFromDob(c.dob);
+  const lines = [];
+  lines.push(`PATIENT: ${c.name||'—'}  MRN ${c.mrn||'—'}`);
+  lines.push(`${age!=null? age+' y · ':''}${c.sex||'—'} · ${c.cpType||'—'} · GMFCS ${c.gmfcs||'—'}`);
+  lines.push(`Operative side: ${c.side||'—'}    Surgery: ${c.surgeryDate||'TBD'}    Status: ${c.status||'planning'}`);
+  lines.push('');
+  lines.push('— RADIOGRAPHS —');
+  const m = c.img||{};
+  lines.push(`Date: ${m.xrayDate||'—'}    Pelvic obliquity: ${m.pelvicObl||'—'}°`);
+  lines.push(`L:  MP ${m.MP_L||'—'}%  AI ${m.AI_L||'—'}°  NSA ${m.NSA_L||'—'}°  AV ${m.AV_L||'—'}°`);
+  lines.push(`R:  MP ${m.MP_R||'—'}%  AI ${m.AI_R||'—'}°  NSA ${m.NSA_R||'—'}°  AV ${m.AV_R||'—'}°`);
+  lines.push('');
+  ['L','R'].forEach(s=>{
+    const k = s==='L'?'pL':'pR';
+    const p = c[k]||{};
+    if(!p.vdro) return;
+    const mp = num(c.img?.['MP_'+s]);
+    const r = planCalc(p, mp);
+    lines.push(`— ${s==='L'?'LEFT':'RIGHT'} VDRO —`);
+    lines.push(`  Varus correction:    ${p.curNSA||'—'}° → ${p.tgtNSA||'—'}°  (Δ ${r.varus!=null?r.varus.toFixed(0)+'°':'—'})`);
+    lines.push(`  Derotation:          ${p.curAV||'—'}° → ${p.tgtAV||'—'}°  (Δ ${r.derot!=null?r.derot.toFixed(0)+'°':'—'} IR of distal fragment)`);
+    lines.push(`  Shortening:          ${p.short||'—'} mm`);
+    lines.push(`  Fixation:            ${p.plate||'—'} blade plate`);
+    lines.push(`  Predicted post-op MP: ${r.predMP!=null?r.predMP.toFixed(0)+'%':'—'}  (estimate)`);
+    const adj = [];
+    if(p.adductor) adj.push('adductor tenotomy');
+    if(p.psoas) adj.push('psoas release');
+    if(p.hamstring) adj.push('hamstring lengthening');
+    if(p.gastroc) adj.push('gastroc / Achilles');
+    if(adj.length) lines.push(`  Soft tissue:         ${adj.join(', ')}`);
+    if(p.pelvic) lines.push(`  Pelvic procedure:    ${p.pelvic}${p.pelvAng?' ('+p.pelvAng+'°)':''}`);
+    lines.push('');
+  });
+  if(c.notes) { lines.push('— NOTES —'); lines.push(c.notes); }
+  el.textContent = lines.join('\n');
+}
+
+// ============== TOOLBAR / SEARCH ==============
+document.getElementById('searchInput').addEventListener('input', e=>{
+  state.search = e.target.value;
+  renderList();
+});
+document.getElementById('statusFilter').addEventListener('click', e=>{
+  const b = e.target.closest('.pill'); if(!b) return;
+  document.querySelectorAll('#statusFilter .pill').forEach(p=>p.classList.remove('active'));
+  b.classList.add('active');
+  state.filter = b.dataset.status;
+  renderList();
+});
+document.getElementById('newCaseBtn').addEventListener('click', ()=>openCase(null));
+document.getElementById('backBtn').addEventListener('click', ()=>{ showView('cases'); renderList(); });
+document.getElementById('printBtn').addEventListener('click', ()=>{
+  renderSummary();
+  setTimeout(()=>window.print(), 100);
+});
+document.getElementById('deleteBtn').addEventListener('click', ()=>{
+  const c = currentCase(); if(!c) return;
+  if(!confirm(`Delete case "${c.name||'unnamed'}"? This cannot be undone.`)) return;
+  state.cases = state.cases.filter(x=>x.id!==c.id);
+  state.currentId = null;
+  saveState();
+  showView('cases');
+  renderList();
+  toast('Case deleted');
+});
+
+// ============== EXPORT / IMPORT ==============
+document.getElementById('exportAllBtn').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(state.cases, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vdro-cases-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(`Exported ${state.cases.length} case(s)`);
+});
+document.getElementById('importBtn').addEventListener('click', ()=>{
+  document.getElementById('importFile').click();
+});
+document.getElementById('importFile').addEventListener('change', async e=>{
+  const f = e.target.files[0]; if(!f) return;
+  try{
+    const text = await f.text();
+    const arr = JSON.parse(text);
+    if(!Array.isArray(arr)) throw new Error('Expected an array of cases');
+    let added=0, updated=0;
+    arr.forEach(rec=>{
+      if(!rec || !rec.id){ rec.id = uid(); }
+      const ix = state.cases.findIndex(c=>c.id===rec.id);
+      if(ix>=0){ state.cases[ix] = rec; updated++; }
+      else { state.cases.push(rec); added++; }
+    });
+    saveState();
+    renderList();
+    toast(`Imported · ${added} added, ${updated} updated`);
+  }catch(err){
+    toast('Import failed: '+err.message, true);
+  }
+  e.target.value = '';
+});
+
+// ============== INIT ==============
+loadState();
+renderList();
+</script>
+</body>
+</html>
