@@ -336,6 +336,93 @@ main{padding:20px;padding-bottom:80px;max-width:1100px;margin:0 auto}
 .ref-panel ul{margin-top:4px;padding-left:18px;color:var(--muted)}
 .ref-panel li{margin-bottom:2px}
 
+/* X-ray planner */
+.xray-upload{
+  border:2px dashed var(--line);background:var(--paper);
+  padding:50px 20px;text-align:center;cursor:pointer;
+}
+.xray-upload:hover{border-color:var(--teal);background:white}
+.xray-upload h4{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--navy);margin-bottom:6px}
+.xray-upload p{font-size:13px;color:var(--muted);margin-bottom:14px}
+.xray-upload .formats{font-size:11px;color:var(--muted);margin-top:10px;font-style:italic}
+
+.xray-workspace{display:grid;grid-template-columns:220px 1fr;gap:14px;align-items:start}
+@media (max-width:880px){.xray-workspace{grid-template-columns:1fr}}
+
+.xray-tools{display:flex;flex-direction:column;gap:10px;font-size:12px}
+.xt-section{
+  background:var(--paper);border:1px solid var(--line);padding:10px 12px;
+}
+.xt-title{
+  font-size:10px;letter-spacing:1.3px;text-transform:uppercase;
+  color:var(--muted);font-weight:500;margin-bottom:8px;
+}
+.xt-btn{
+  display:flex;align-items:center;justify-content:space-between;width:100%;
+  background:white;border:1px solid var(--line);padding:7px 10px;margin-bottom:4px;
+  font-size:12px;font-family:inherit;cursor:pointer;text-align:left;color:var(--ink);
+  transition:all 0.12s;
+}
+.xt-btn:hover{border-color:var(--teal-light);background:rgba(15,125,138,0.04)}
+.xt-btn.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:600}
+.xt-btn.done{border-left:3px solid var(--success)}
+.xt-btn.partial{border-left:3px solid var(--warning)}
+.xt-btn .pts{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);
+}
+.xt-btn.active .pts,.xt-btn.done .pts{color:inherit}
+.xt-btn.danger{background:rgba(164,52,29,0.05);color:var(--danger);border-color:#e0b3aa}
+.xt-btn.danger:hover{background:rgba(164,52,29,0.1)}
+.xt-btn.primary{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.xt-btn.primary:hover{background:var(--navy-deep)}
+.xt-select{
+  width:100%;border:1px solid var(--line);padding:6px 8px;font-size:12px;
+  font-family:inherit;margin-bottom:6px;background:white;
+}
+.xt-hint{font-size:10px;color:var(--muted);font-style:italic;margin-top:4px;line-height:1.4}
+
+.xray-canvas-wrap{
+  position:relative;background:#1a1a1a;border:1px solid var(--line);
+  min-height:520px;overflow:hidden;
+}
+#xrayCanvas{display:block;width:100%;height:520px;cursor:crosshair;touch-action:none}
+#xrayCanvas.panning{cursor:grabbing}
+#xrayCanvas.idle{cursor:grab}
+
+.xray-canvas-controls{
+  position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:2;
+}
+.xc-btn{
+  width:30px;height:30px;background:rgba(10,37,64,0.85);color:var(--cream);
+  border:none;font-size:14px;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;
+}
+.xc-btn:hover{background:var(--navy)}
+
+.xray-status-strip{
+  position:absolute;bottom:8px;left:8px;right:8px;
+  background:rgba(10,37,64,0.9);color:var(--cream);
+  padding:6px 12px;font-size:11px;font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0.3px;display:flex;justify-content:space-between;gap:10px;
+  pointer-events:none;
+}
+.xray-status-strip.active-tool{background:rgba(201,165,90,0.95);color:var(--navy);font-weight:600}
+
+.xray-readout{
+  margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;
+}
+.xrm{
+  background:white;border:1px solid var(--line);padding:8px 10px;
+}
+.xrm .l{font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:500}
+.xrm .v{font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--navy);margin-top:2px}
+.xrm .v .u{font-size:10px;color:var(--muted);font-weight:400;margin-left:2px;font-family:'IBM Plex Mono',monospace}
+.xrm.warn{border-top:2px solid var(--warning)}
+.xrm.warn .v{color:var(--warning)}
+.xrm.alert{border-top:2px solid var(--danger)}
+.xrm.alert .v{color:var(--danger)}
+.xrm.ok{border-top:2px solid var(--success)}
+
 /* Print */
 @media print{
   body{background:white}
@@ -418,6 +505,7 @@ main{padding:20px;padding-bottom:80px;max-width:1100px;margin:0 auto}
       <button class="subtab active" data-sub="demographics">Demographics</button>
       <button class="subtab" data-sub="clinical">Clinical</button>
       <button class="subtab" data-sub="imaging">Imaging</button>
+      <button class="subtab" data-sub="xray">X-ray Planner</button>
       <button class="subtab" data-sub="plan">VDRO Plan</button>
       <button class="subtab" data-sub="notes">Notes &amp; Summary</button>
     </div>
@@ -620,6 +708,106 @@ main{padding:20px;padding-bottom:80px;max-width:1100px;margin:0 auto}
           </div>
 
           <div class="metric-grid" id="imagingMetrics"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- X-RAY PLANNER -->
+    <div class="subview" id="sub-xray">
+      <div class="ref-panel">
+        <b>X-ray planner</b> — Upload an AP pelvis, place reference points, and drop a blade plate template. MP, NSA, AI are computed live and can be written into the Imaging tab.
+        <ul>
+          <li>Drag any placed point to fine-tune. <b>Shift+drag</b> or two-finger drag = pan. <b>Wheel</b> / pinch = zoom.</li>
+          <li>Calibrate by 2-point ruler (with mm) <i>or</i> by placing a blade plate of known dimensions.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>AP pelvis</h3>
+          <span class="hint" id="xrayImgHint">no image loaded</span>
+        </div>
+        <div class="card-body">
+          <input type="file" id="xrayFile" accept="image/*" style="display:none">
+
+          <div class="xray-upload" id="xrayUploadBox" onclick="document.getElementById('xrayFile').click()">
+            <h4>Drop an AP pelvis x-ray here</h4>
+            <p>Click to choose a file, or paste an image with ⌘V</p>
+            <button class="btn outline" type="button" onclick="event.stopPropagation();document.getElementById('xrayFile').click()">Choose file</button>
+            <div class="formats">JPG · PNG · WebP · ≤ ~3 MB recommended (auto-compressed)</div>
+          </div>
+
+          <div class="xray-workspace" id="xrayWorkspace" style="display:none">
+            <div class="xray-tools">
+              <div class="xt-section">
+                <div class="xt-title">Calibration</div>
+                <button class="xt-btn" data-tool="cal">📏 2-pt ruler <span class="pts" id="st-cal">—</span></button>
+                <div class="xt-hint">Click two points on a known-length structure, then enter the distance in mm.</div>
+              </div>
+
+              <div class="xt-section">
+                <div class="xt-title">Reference lines</div>
+                <button class="xt-btn" data-tool="hil">Hilgenreiner <span class="pts" id="st-hil">0/2</span></button>
+                <button class="xt-btn" data-tool="perkL">Perkins · Roof L <span class="pts" id="st-perkL">0/1</span></button>
+                <button class="xt-btn" data-tool="perkR">Perkins · Roof R <span class="pts" id="st-perkR">0/1</span></button>
+                <div class="xt-hint">Hilgenreiner = both triradiate cartilages. Perkins point = lateral acetabular margin (also the roof's lateral end for AI).</div>
+              </div>
+
+              <div class="xt-section">
+                <div class="xt-title">Femoral head (3 pts each)</div>
+                <button class="xt-btn" data-tool="headL">Head L <span class="pts" id="st-headL">0/3</span></button>
+                <button class="xt-btn" data-tool="headR">Head R <span class="pts" id="st-headR">0/3</span></button>
+              </div>
+
+              <div class="xt-section">
+                <div class="xt-title">NSA — Left</div>
+                <button class="xt-btn" data-tool="shaftL">Shaft L <span class="pts" id="st-shaftL">0/2</span></button>
+                <button class="xt-btn" data-tool="neckL">Neck L <span class="pts" id="st-neckL">0/2</span></button>
+              </div>
+              <div class="xt-section">
+                <div class="xt-title">NSA — Right</div>
+                <button class="xt-btn" data-tool="shaftR">Shaft R <span class="pts" id="st-shaftR">0/2</span></button>
+                <button class="xt-btn" data-tool="neckR">Neck R <span class="pts" id="st-neckR">0/2</span></button>
+              </div>
+
+              <div class="xt-section">
+                <div class="xt-title">Blade plate template</div>
+                <select class="xt-select" id="plateAngleSel">
+                  <option value="90">90°</option>
+                  <option value="100">100°</option>
+                  <option value="110" selected>110°</option>
+                  <option value="120">120°</option>
+                  <option value="130">130°</option>
+                </select>
+                <button class="xt-btn" data-tool="plateL">Place plate · Left <span class="pts" id="st-plateL">—</span></button>
+                <button class="xt-btn" data-tool="plateR">Place plate · Right <span class="pts" id="st-plateR">—</span></button>
+                <div class="xt-hint">Click the femoral head (blade entry); the plate is drawn at the selected angle along the neck axis. Drag the side-plate handle to set the desired post-op shaft direction.</div>
+              </div>
+
+              <div class="xt-section">
+                <button class="xt-btn primary" id="applyXrayBtn">↑ Apply to Imaging</button>
+                <button class="xt-btn" id="reUploadBtn">↻ Replace image</button>
+                <button class="xt-btn danger" id="clearXrayBtn">Clear all points</button>
+                <button class="xt-btn danger" id="removeImgBtn">Remove image</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="xray-canvas-wrap">
+                <canvas id="xrayCanvas"></canvas>
+                <div class="xray-canvas-controls">
+                  <button class="xc-btn" id="zoomInBtn" title="Zoom in">+</button>
+                  <button class="xc-btn" id="zoomOutBtn" title="Zoom out">−</button>
+                  <button class="xc-btn" id="fitBtn" title="Fit to view">⤢</button>
+                </div>
+                <div class="xray-status-strip" id="xrayStatus">
+                  <span id="xrayStatusL">Ready</span>
+                  <span id="xrayStatusR"></span>
+                </div>
+              </div>
+              <div class="xray-readout" id="xrayReadout"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -895,6 +1083,7 @@ function showSub(name){
   document.querySelectorAll('.subtab').forEach(t=>{
     t.classList.toggle('active', t.dataset.sub===name);
   });
+  if(name==='xray') xrayOpen();
 }
 
 document.querySelectorAll('.tab').forEach(t=>{
@@ -1318,6 +1507,940 @@ document.getElementById('importFile').addEventListener('change', async e=>{
   }
   e.target.value = '';
 });
+
+// ============== X-RAY ANNOTATOR ==============
+const XR = {
+  canvas:null, ctx:null, img:null,
+  tool:null, toolStep:0,
+  scale:1, panX:0, panY:0,
+  drag:null,           // { kind, key, idx? } currently being dragged
+  isPanning:false, panStart:null,
+  initialized:false,
+};
+
+// Tool config: which points each tool collects
+const XR_TOOLS = {
+  cal:    { count:2, label:'2-pt ruler' },
+  hil:    { count:2, label:'Hilgenreiner' },
+  perkL:  { count:1, label:'Perkins L' },
+  perkR:  { count:1, label:'Perkins R' },
+  headL:  { count:3, label:'Head L' },
+  headR:  { count:3, label:'Head R' },
+  shaftL: { count:2, label:'Shaft L' },
+  neckL:  { count:2, label:'Neck L' },
+  shaftR: { count:2, label:'Shaft R' },
+  neckR:  { count:2, label:'Neck R' },
+  plateL: { count:2, label:'Plate L' },
+  plateR: { count:2, label:'Plate R' },
+};
+
+function xrayData(){
+  const c = currentCase(); if(!c) return null;
+  if(!c.xray) c.xray = { points:{}, cal:null, plateL:null, plateR:null, plateAngle:110 };
+  return c.xray;
+}
+
+function xrayInit(){
+  if(XR.initialized) return;
+  XR.initialized = true;
+  XR.canvas = document.getElementById('xrayCanvas');
+  XR.ctx = XR.canvas.getContext('2d');
+
+  document.getElementById('xrayFile').addEventListener('change', xrayOnFile);
+  document.addEventListener('paste', xrayOnPaste);
+  document.getElementById('reUploadBtn').addEventListener('click', ()=>document.getElementById('xrayFile').click());
+  document.getElementById('removeImgBtn').addEventListener('click', xrayRemoveImg);
+  document.getElementById('clearXrayBtn').addEventListener('click', xrayClearPoints);
+  document.getElementById('applyXrayBtn').addEventListener('click', xrayApply);
+  document.getElementById('zoomInBtn').addEventListener('click', ()=>xrayZoom(1.25));
+  document.getElementById('zoomOutBtn').addEventListener('click', ()=>xrayZoom(1/1.25));
+  document.getElementById('fitBtn').addEventListener('click', ()=>{ xrayFit(); xrayDraw(); });
+  document.getElementById('plateAngleSel').addEventListener('change', e=>{
+    const d = xrayData(); if(!d) return;
+    d.plateAngle = parseFloat(e.target.value);
+    saveState();
+    xrayDraw(); xrayUpdateReadout();
+  });
+
+  document.querySelectorAll('.xt-btn[data-tool]').forEach(b=>{
+    b.addEventListener('click', ()=>xrayActivateTool(b.dataset.tool));
+  });
+
+  XR.canvas.addEventListener('pointerdown', xrayPtrDown);
+  XR.canvas.addEventListener('pointermove', xrayPtrMove);
+  XR.canvas.addEventListener('pointerup', xrayPtrUp);
+  XR.canvas.addEventListener('pointercancel', xrayPtrUp);
+  XR.canvas.addEventListener('wheel', xrayOnWheel, {passive:false});
+
+  // Drag-and-drop on upload box
+  const box = document.getElementById('xrayUploadBox');
+  ['dragenter','dragover'].forEach(ev=>box.addEventListener(ev, e=>{ e.preventDefault(); box.style.borderColor='var(--teal)'; }));
+  ['dragleave','drop'].forEach(ev=>box.addEventListener(ev, e=>{ e.preventDefault(); box.style.borderColor=''; }));
+  box.addEventListener('drop', e=>{
+    const f = e.dataTransfer.files[0];
+    if(f) xrayLoadFile(f);
+  });
+
+  window.addEventListener('resize', ()=>{ if(XR.img){ xrayFitCanvas(); xrayDraw(); } });
+}
+
+function xrayOpen(){
+  xrayInit();
+  const d = xrayData(); if(!d) return;
+  document.getElementById('plateAngleSel').value = d.plateAngle || 110;
+  if(d.img){
+    const img = new Image();
+    img.onload = ()=>{
+      XR.img = img;
+      document.getElementById('xrayUploadBox').style.display = 'none';
+      document.getElementById('xrayWorkspace').style.display = 'grid';
+      document.getElementById('xrayImgHint').textContent = `${img.naturalWidth}×${img.naturalHeight}`;
+      xrayFitCanvas();
+      xrayFit();
+      xrayDraw();
+      xrayUpdateReadout();
+      xrayUpdateStatus();
+    };
+    img.src = d.img;
+  } else {
+    XR.img = null;
+    document.getElementById('xrayUploadBox').style.display = 'block';
+    document.getElementById('xrayWorkspace').style.display = 'none';
+    document.getElementById('xrayImgHint').textContent = 'no image loaded';
+  }
+}
+
+function xrayFitCanvas(){
+  const wrap = XR.canvas.parentElement;
+  const w = wrap.clientWidth;
+  const h = 520;
+  // Backing store for device pixel ratio
+  const dpr = window.devicePixelRatio || 1;
+  XR.canvas.width = w * dpr;
+  XR.canvas.height = h * dpr;
+  XR.canvas.style.width = w + 'px';
+  XR.canvas.style.height = h + 'px';
+  XR.ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+function xrayFit(){
+  if(!XR.img) return;
+  const w = XR.canvas.clientWidth, h = XR.canvas.clientHeight;
+  const sx = w / XR.img.naturalWidth;
+  const sy = h / XR.img.naturalHeight;
+  XR.scale = Math.min(sx, sy) * 0.96;
+  XR.panX = (w - XR.img.naturalWidth * XR.scale) / 2;
+  XR.panY = (h - XR.img.naturalHeight * XR.scale) / 2;
+}
+
+function xrayOnFile(e){
+  const f = e.target.files[0]; if(!f) return;
+  xrayLoadFile(f);
+  e.target.value = '';
+}
+function xrayOnPaste(e){
+  if(!document.getElementById('sub-xray').classList.contains('active')) return;
+  const items = e.clipboardData && e.clipboardData.items;
+  if(!items) return;
+  for(const it of items){
+    if(it.type && it.type.startsWith('image/')){
+      const f = it.getAsFile();
+      if(f){ xrayLoadFile(f); e.preventDefault(); break; }
+    }
+  }
+}
+
+function xrayLoadFile(f){
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const tempImg = new Image();
+    tempImg.onload = ()=>{
+      // Compress: cap longest side to 1800px, JPEG quality 0.82
+      const MAX = 1800;
+      let w = tempImg.naturalWidth, h = tempImg.naturalHeight;
+      if(Math.max(w,h) > MAX){
+        const s = MAX / Math.max(w,h);
+        w = Math.round(w*s); h = Math.round(h*s);
+      }
+      const cnv = document.createElement('canvas');
+      cnv.width = w; cnv.height = h;
+      const cx = cnv.getContext('2d');
+      cx.drawImage(tempImg, 0, 0, w, h);
+      const dataURL = cnv.toDataURL('image/jpeg', 0.82);
+      const d = xrayData();
+      d.img = dataURL;
+      d.points = {}; // reset points on new image
+      d.cal = null; d.plateL = null; d.plateR = null;
+      try{ saveState(); }
+      catch(err){
+        if(err.name === 'QuotaExceededError'){
+          toast('Storage full — image too big to save. Try a smaller image or export cases.', true);
+          delete d.img;
+          return;
+        }
+        throw err;
+      }
+      xrayOpen();
+      toast('Image loaded');
+    };
+    tempImg.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+}
+
+function xrayRemoveImg(){
+  if(!confirm('Remove image and all reference points?')) return;
+  const d = xrayData();
+  d.img = null; d.points = {}; d.cal = null; d.plateL = null; d.plateR = null;
+  saveState();
+  xrayOpen();
+  toast('Image removed');
+}
+
+function xrayClearPoints(){
+  if(!confirm('Clear all reference points?')) return;
+  const d = xrayData();
+  d.points = {}; d.cal = null; d.plateL = null; d.plateR = null;
+  saveState();
+  xrayDraw(); xrayUpdateReadout(); xrayUpdateStatus();
+  toast('Points cleared');
+}
+
+function xrayActivateTool(tool){
+  XR.tool = tool;
+  XR.toolStep = 0;
+  // For multi-point tools, reset their data
+  const d = xrayData();
+  if(tool === 'hil'){ d.points.hil_a = null; d.points.hil_b = null; }
+  else if(tool === 'cal'){ d.cal = null; }
+  else if(tool === 'perkL'){ d.points.perk_L = null; }
+  else if(tool === 'perkR'){ d.points.perk_R = null; }
+  else if(tool === 'headL'){ d.points.head_L = []; }
+  else if(tool === 'headR'){ d.points.head_R = []; }
+  else if(tool === 'shaftL'){ d.points.shaft_L_a = null; d.points.shaft_L_b = null; }
+  else if(tool === 'shaftR'){ d.points.shaft_R_a = null; d.points.shaft_R_b = null; }
+  else if(tool === 'neckL'){ d.points.neck_L_a = null; d.points.neck_L_b = null; }
+  else if(tool === 'neckR'){ d.points.neck_R_a = null; d.points.neck_R_b = null; }
+  else if(tool === 'plateL'){ d.plateL = null; }
+  else if(tool === 'plateR'){ d.plateR = null; }
+
+  document.querySelectorAll('.xt-btn[data-tool]').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tool === tool);
+  });
+  xrayDraw();
+  xrayUpdateStatus();
+}
+
+function xrayPtrDown(e){
+  if(!XR.img) return;
+  e.preventDefault();
+  XR.canvas.setPointerCapture(e.pointerId);
+  const rect = XR.canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+
+  if(e.shiftKey || e.button === 1){
+    XR.isPanning = true;
+    XR.panStart = { x: sx - XR.panX, y: sy - XR.panY };
+    XR.canvas.classList.add('panning');
+    return;
+  }
+
+  // Hit-test existing points → drag
+  const hit = xrayHitTest(sx, sy);
+  if(hit){
+    XR.drag = hit;
+    return;
+  }
+
+  // Active tool → place point
+  if(XR.tool){
+    const ip = xrayScreenToImg(sx, sy);
+    xrayPlacePoint(ip);
+    return;
+  }
+
+  // No tool, no hit → start panning
+  XR.isPanning = true;
+  XR.panStart = { x: sx - XR.panX, y: sy - XR.panY };
+  XR.canvas.classList.add('panning');
+}
+
+function xrayPtrMove(e){
+  if(!XR.img) return;
+  const rect = XR.canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+
+  if(XR.isPanning){
+    XR.panX = sx - XR.panStart.x;
+    XR.panY = sy - XR.panStart.y;
+    xrayDraw();
+    return;
+  }
+
+  if(XR.drag){
+    const ip = xrayScreenToImg(sx, sy);
+    xrayApplyDrag(XR.drag, ip);
+    xrayDraw();
+    xrayUpdateReadout();
+    return;
+  }
+}
+
+function xrayPtrUp(e){
+  if(XR.drag || XR.isPanning){
+    XR.drag = null;
+    XR.isPanning = false;
+    XR.canvas.classList.remove('panning');
+    saveState();
+    xrayUpdateReadout();
+    xrayUpdateStatus();
+  }
+}
+
+function xrayOnWheel(e){
+  if(!XR.img) return;
+  e.preventDefault();
+  const rect = XR.canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  const before = xrayScreenToImg(sx, sy);
+  const factor = e.deltaY < 0 ? 1.15 : 1/1.15;
+  XR.scale *= factor;
+  XR.scale = Math.max(0.05, Math.min(20, XR.scale));
+  const after = xrayImgToScreen(before);
+  XR.panX += sx - after.x;
+  XR.panY += sy - after.y;
+  xrayDraw();
+}
+
+function xrayZoom(f){
+  if(!XR.img) return;
+  const cx = XR.canvas.clientWidth/2, cy = XR.canvas.clientHeight/2;
+  const before = xrayScreenToImg(cx, cy);
+  XR.scale = Math.max(0.05, Math.min(20, XR.scale * f));
+  const after = xrayImgToScreen(before);
+  XR.panX += cx - after.x;
+  XR.panY += cy - after.y;
+  xrayDraw();
+}
+
+function xrayImgToScreen(p){
+  return { x: p.x * XR.scale + XR.panX, y: p.y * XR.scale + XR.panY };
+}
+function xrayScreenToImg(x, y){
+  return { x: (x - XR.panX) / XR.scale, y: (y - XR.panY) / XR.scale };
+}
+
+function xrayPlacePoint(p){
+  const d = xrayData();
+  const t = XR.tool;
+  const cfg = XR_TOOLS[t];
+  if(!cfg) return;
+
+  if(t==='cal'){
+    if(XR.toolStep===0){ d.cal = { p1:p }; XR.toolStep=1; }
+    else { d.cal.p2 = p; XR.tool=null; XR.toolStep=0; xrayAskCalMm(); }
+  } else if(t==='hil'){
+    if(XR.toolStep===0){ d.points.hil_a = p; XR.toolStep=1; }
+    else { d.points.hil_b = p; XR.tool=null; XR.toolStep=0; }
+  } else if(t==='perkL'){ d.points.perk_L = p; XR.tool=null; }
+  else if(t==='perkR'){ d.points.perk_R = p; XR.tool=null; }
+  else if(t==='headL'){
+    d.points.head_L = d.points.head_L || [];
+    d.points.head_L[XR.toolStep] = p;
+    XR.toolStep++;
+    if(XR.toolStep>=3){ XR.tool=null; XR.toolStep=0; }
+  } else if(t==='headR'){
+    d.points.head_R = d.points.head_R || [];
+    d.points.head_R[XR.toolStep] = p;
+    XR.toolStep++;
+    if(XR.toolStep>=3){ XR.tool=null; XR.toolStep=0; }
+  } else if(t==='shaftL'){
+    if(XR.toolStep===0){ d.points.shaft_L_a=p; XR.toolStep=1; }
+    else { d.points.shaft_L_b=p; XR.tool=null; XR.toolStep=0; }
+  } else if(t==='shaftR'){
+    if(XR.toolStep===0){ d.points.shaft_R_a=p; XR.toolStep=1; }
+    else { d.points.shaft_R_b=p; XR.tool=null; XR.toolStep=0; }
+  } else if(t==='neckL'){
+    if(XR.toolStep===0){ d.points.neck_L_a=p; XR.toolStep=1; }
+    else { d.points.neck_L_b=p; XR.tool=null; XR.toolStep=0; }
+  } else if(t==='neckR'){
+    if(XR.toolStep===0){ d.points.neck_R_a=p; XR.toolStep=1; }
+    else { d.points.neck_R_b=p; XR.tool=null; XR.toolStep=0; }
+  } else if(t==='plateL'){
+    if(XR.toolStep===0){ d.plateL = { entry:p, angle: d.plateAngle||110 }; XR.toolStep=1; }
+    else { d.plateL.shaftEnd = p; XR.tool=null; XR.toolStep=0; }
+  } else if(t==='plateR'){
+    if(XR.toolStep===0){ d.plateR = { entry:p, angle: d.plateAngle||110 }; XR.toolStep=1; }
+    else { d.plateR.shaftEnd = p; XR.tool=null; XR.toolStep=0; }
+  }
+
+  // Deactivate button if tool finished
+  if(!XR.tool){
+    document.querySelectorAll('.xt-btn[data-tool]').forEach(b=>b.classList.remove('active'));
+  }
+  saveState();
+  xrayDraw();
+  xrayUpdateReadout();
+  xrayUpdateStatus();
+}
+
+function xrayAskCalMm(){
+  const v = prompt('Distance between the two points (mm)?', '50');
+  if(v == null){ const d = xrayData(); d.cal=null; saveState(); xrayDraw(); return; }
+  const mm = parseFloat(v);
+  if(isNaN(mm) || mm <= 0){
+    const d = xrayData(); d.cal=null; saveState(); xrayDraw();
+    toast('Invalid distance — calibration cleared', true);
+    return;
+  }
+  const d = xrayData();
+  d.cal.mm = mm;
+  saveState();
+  xrayDraw(); xrayUpdateReadout(); xrayUpdateStatus();
+  toast(`Calibrated: ${mm} mm`);
+}
+
+function xrayHitTest(sx, sy){
+  const d = xrayData(); if(!d) return null;
+  const HIT = 12; // pixels
+  const cand = [];
+  // Helper to push named points
+  const tryPt = (p, ref) => { if(!p) return; const s = xrayImgToScreen(p); if(Math.hypot(s.x-sx, s.y-sy) < HIT) cand.push({d:Math.hypot(s.x-sx,s.y-sy), ref}); };
+  if(d.cal){ tryPt(d.cal.p1, {kind:'cal',k:'p1'}); tryPt(d.cal.p2, {kind:'cal',k:'p2'}); }
+  tryPt(d.points.hil_a, {kind:'point',k:'hil_a'});
+  tryPt(d.points.hil_b, {kind:'point',k:'hil_b'});
+  tryPt(d.points.perk_L, {kind:'point',k:'perk_L'});
+  tryPt(d.points.perk_R, {kind:'point',k:'perk_R'});
+  ['L','R'].forEach(s=>{
+    const arr = d.points['head_'+s] || [];
+    arr.forEach((p, i)=>tryPt(p, {kind:'head',k:'head_'+s, idx:i}));
+    tryPt(d.points['shaft_'+s+'_a'], {kind:'point',k:'shaft_'+s+'_a'});
+    tryPt(d.points['shaft_'+s+'_b'], {kind:'point',k:'shaft_'+s+'_b'});
+    tryPt(d.points['neck_'+s+'_a'], {kind:'point',k:'neck_'+s+'_a'});
+    tryPt(d.points['neck_'+s+'_b'], {kind:'point',k:'neck_'+s+'_b'});
+    const pl = d['plate'+s];
+    if(pl){ tryPt(pl.entry, {kind:'plate',k:'plate'+s, sub:'entry'}); tryPt(pl.shaftEnd, {kind:'plate',k:'plate'+s, sub:'shaftEnd'}); }
+  });
+  if(!cand.length) return null;
+  cand.sort((a,b)=>a.d-b.d);
+  return cand[0].ref;
+}
+
+function xrayApplyDrag(ref, p){
+  const d = xrayData();
+  if(ref.kind === 'cal'){ d.cal[ref.k] = p; }
+  else if(ref.kind === 'point'){ d.points[ref.k] = p; }
+  else if(ref.kind === 'head'){ d.points[ref.k][ref.idx] = p; }
+  else if(ref.kind === 'plate'){ d[ref.k][ref.sub] = p; }
+}
+
+// ============== GEOMETRY ==============
+function xrayCircle3(p1,p2,p3){
+  const ax=p1.x, ay=p1.y, bx=p2.x, by=p2.y, cx=p3.x, cy=p3.y;
+  const D = 2*(ax*(by-cy) + bx*(cy-ay) + cx*(ay-by));
+  if(Math.abs(D) < 1e-6) return null;
+  const ux = ((ax*ax+ay*ay)*(by-cy) + (bx*bx+by*by)*(cy-ay) + (cx*cx+cy*cy)*(ay-by)) / D;
+  const uy = ((ax*ax+ay*ay)*(cx-bx) + (bx*bx+by*by)*(ax-cx) + (cx*cx+cy*cy)*(bx-ax)) / D;
+  const r = Math.hypot(ux-ax, uy-ay);
+  return { x:ux, y:uy, r };
+}
+
+function xraySafeUnit(v){
+  const L = Math.hypot(v.x, v.y);
+  return L < 1e-6 ? null : { x:v.x/L, y:v.y/L };
+}
+
+function xrayComputeMP(side){
+  const d = xrayData();
+  if(!d.points.hil_a || !d.points.hil_b) return null;
+  const perk = d.points['perk_'+side]; if(!perk) return null;
+  const head = d.points['head_'+side]; if(!head || head.length < 3) return null;
+  const c = xrayCircle3(head[0], head[1], head[2]); if(!c) return null;
+
+  const h = xraySafeUnit({ x: d.points.hil_b.x - d.points.hil_a.x, y: d.points.hil_b.y - d.points.hil_a.y });
+  if(!h) return null;
+  const M = { x: (d.points.hil_a.x+d.points.hil_b.x)/2, y: (d.points.hil_a.y+d.points.hil_b.y)/2 };
+  const toPerk = { x: perk.x - M.x, y: perk.y - M.y };
+  const sign = Math.sign(toPerk.x*h.x + toPerk.y*h.y) || 1;
+  const lat = { x: h.x*sign, y: h.y*sign };
+  const dC = (c.x - perk.x)*lat.x + (c.y - perk.y)*lat.y;
+  const latEdge = dC + c.r;
+  const mp = (latEdge / (2*c.r)) * 100;
+  return Math.max(0, mp);
+}
+
+function xrayComputeAI(side){
+  const d = xrayData();
+  if(!d.points.hil_a || !d.points.hil_b) return null;
+  const perk = d.points['perk_'+side]; if(!perk) return null;
+  const h = { x: d.points.hil_b.x - d.points.hil_a.x, y: d.points.hil_b.y - d.points.hil_a.y };
+  const M = { x: (d.points.hil_a.x+d.points.hil_b.x)/2, y: (d.points.hil_a.y+d.points.hil_b.y)/2 };
+  const toPerk = { x: perk.x - M.x, y: perk.y - M.y };
+  const dotA = (d.points.hil_a.x - M.x)*toPerk.x + (d.points.hil_a.y - M.y)*toPerk.y;
+  const tri = dotA > 0 ? d.points.hil_a : d.points.hil_b;
+  const r = { x: perk.x - tri.x, y: perk.y - tri.y };
+  const hu = xraySafeUnit(h), ru = xraySafeUnit(r); if(!hu||!ru) return null;
+  const cosA = hu.x*ru.x + hu.y*ru.y;
+  let theta = Math.acos(Math.max(-1,Math.min(1, Math.abs(cosA)))) * 180/Math.PI;
+  return theta;
+}
+
+function xrayComputeNSA(side){
+  const d = xrayData();
+  const sa = d.points['shaft_'+side+'_a'], sb = d.points['shaft_'+side+'_b'];
+  const na = d.points['neck_'+side+'_a'], nb = d.points['neck_'+side+'_b'];
+  if(!sa||!sb||!na||!nb) return null;
+  const s = xraySafeUnit({ x: sb.x-sa.x, y: sb.y-sa.y });
+  const n = xraySafeUnit({ x: nb.x-na.x, y: nb.y-na.y });
+  if(!s||!n) return null;
+  const cosA = Math.max(-1, Math.min(1, s.x*n.x + s.y*n.y));
+  let theta = Math.acos(cosA) * 180/Math.PI;
+  if(theta < 90) theta = 180 - theta; // NSA is the obtuse one
+  return theta;
+}
+
+// Convert pixels to mm if calibrated
+function xrayPxToMm(px){
+  const d = xrayData();
+  if(!d.cal || !d.cal.p1 || !d.cal.p2 || !d.cal.mm) return null;
+  const calPx = Math.hypot(d.cal.p2.x - d.cal.p1.x, d.cal.p2.y - d.cal.p1.y);
+  if(calPx < 1e-3) return null;
+  return px * (d.cal.mm / calPx);
+}
+function xrayMmToPx(mm){
+  const d = xrayData();
+  if(!d.cal || !d.cal.p1 || !d.cal.p2 || !d.cal.mm) return null;
+  const calPx = Math.hypot(d.cal.p2.x - d.cal.p1.x, d.cal.p2.y - d.cal.p1.y);
+  return mm * (calPx / d.cal.mm);
+}
+
+// ============== DRAWING ==============
+function xrayDraw(){
+  if(!XR.ctx || !XR.canvas) return;
+  const ctx = XR.ctx;
+  const W = XR.canvas.clientWidth, H = XR.canvas.clientHeight;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fillRect(0,0,W,H);
+  if(!XR.img) return;
+
+  ctx.save();
+  ctx.translate(XR.panX, XR.panY);
+  ctx.scale(XR.scale, XR.scale);
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(XR.img, 0, 0);
+  ctx.restore();
+
+  const d = xrayData(); if(!d) return;
+
+  // Calibration ruler
+  if(d.cal && d.cal.p1 && d.cal.p2){
+    drawSeg(d.cal.p1, d.cal.p2, '#2f6b3a', 2);
+    drawDot(d.cal.p1, '#2f6b3a');
+    drawDot(d.cal.p2, '#2f6b3a');
+    if(d.cal.mm){
+      const mid = midPt(d.cal.p1, d.cal.p2);
+      const s = xrayImgToScreen(mid);
+      ctx.fillStyle = '#2f6b3a';
+      ctx.font = 'bold 12px IBM Plex Mono, monospace';
+      ctx.fillText(`${d.cal.mm} mm`, s.x+8, s.y-6);
+    }
+  }
+
+  // Hilgenreiner extended line
+  if(d.points.hil_a && d.points.hil_b){
+    drawExtendedLine(d.points.hil_a, d.points.hil_b, '#c9a55a', 2);
+    drawLabeledDot(d.points.hil_a, '#c9a55a', 'H');
+    drawLabeledDot(d.points.hil_b, '#c9a55a', 'H');
+  }
+
+  // Perkins lines + Roof lines for each side
+  ['L','R'].forEach(side=>{
+    const perk = d.points['perk_'+side];
+    if(!perk) return;
+    if(d.points.hil_a && d.points.hil_b){
+      const h = { x: d.points.hil_b.x - d.points.hil_a.x, y: d.points.hil_b.y - d.points.hil_a.y };
+      const perp = xraySafeUnit({ x: -h.y, y: h.x });
+      if(perp){
+        // Perkins (extended)
+        drawLineThroughDir(perk, perp, side==='L' ? '#3aa5b1' : '#0f7d8a', 1.5);
+      }
+      // Roof line (triradiate → perk)
+      const M = midPt(d.points.hil_a, d.points.hil_b);
+      const toPerk = { x: perk.x - M.x, y: perk.y - M.y };
+      const dotA = (d.points.hil_a.x - M.x)*toPerk.x + (d.points.hil_a.y - M.y)*toPerk.y;
+      const tri = dotA > 0 ? d.points.hil_a : d.points.hil_b;
+      drawSeg(tri, perk, '#e4c989', 2.5);
+    }
+    drawLabeledDot(perk, side==='L'?'#3aa5b1':'#0f7d8a', 'P'+side);
+  });
+
+  // Femoral heads
+  ['L','R'].forEach(side=>{
+    const pts = d.points['head_'+side] || [];
+    pts.forEach((p,i)=>drawDot(p, '#a4341d'));
+    if(pts.length >= 3){
+      const c = xrayCircle3(pts[0], pts[1], pts[2]);
+      if(c) drawCircleImg(c, '#a4341d', 2);
+    }
+  });
+
+  // Shaft + neck axes
+  ['L','R'].forEach(side=>{
+    const sa=d.points['shaft_'+side+'_a'], sb=d.points['shaft_'+side+'_b'];
+    if(sa && sb){
+      drawExtendedLine(sa, sb, '#0a2540', 2);
+      drawLabeledDot(sa, '#0a2540', 'S'+side);
+      drawDot(sb, '#0a2540');
+    }
+    const na=d.points['neck_'+side+'_a'], nb=d.points['neck_'+side+'_b'];
+    if(na && nb){
+      drawExtendedLine(na, nb, '#06182e', 2);
+      drawLabeledDot(na, '#06182e', 'N'+side);
+      drawDot(nb, '#06182e');
+    }
+  });
+
+  // Blade plates
+  ['L','R'].forEach(side=>drawPlate(side));
+
+  // Tool ghost preview
+  drawToolGhost();
+}
+
+function drawSeg(a, b, color, width){
+  const ctx = XR.ctx;
+  const sa = xrayImgToScreen(a), sb = xrayImgToScreen(b);
+  ctx.strokeStyle = color; ctx.lineWidth = width;
+  ctx.beginPath(); ctx.moveTo(sa.x, sa.y); ctx.lineTo(sb.x, sb.y); ctx.stroke();
+}
+function drawExtendedLine(a, b, color, width){
+  const ctx = XR.ctx;
+  const u = xraySafeUnit({ x: b.x-a.x, y: b.y-a.y }); if(!u) return;
+  const W = XR.canvas.clientWidth, H = XR.canvas.clientHeight;
+  const D = (W+H)*3; // big enough
+  const p1 = { x: a.x - u.x*D, y: a.y - u.y*D };
+  const p2 = { x: a.x + u.x*D, y: a.y + u.y*D };
+  const s1 = xrayImgToScreen(p1), s2 = xrayImgToScreen(p2);
+  ctx.strokeStyle = color; ctx.lineWidth = width;
+  ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(s1.x, s1.y); ctx.lineTo(s2.x, s2.y); ctx.stroke();
+  ctx.setLineDash([]);
+  // Solid central segment
+  ctx.strokeStyle = color; ctx.lineWidth = width+0.5;
+  const sa = xrayImgToScreen(a), sb = xrayImgToScreen(b);
+  ctx.beginPath(); ctx.moveTo(sa.x, sa.y); ctx.lineTo(sb.x, sb.y); ctx.stroke();
+}
+function drawLineThroughDir(p, dir, color, width){
+  // Draw infinite line through p with given unit direction
+  const a = { x: p.x - dir.x*5000, y: p.y - dir.y*5000 };
+  const b = { x: p.x + dir.x*5000, y: p.y + dir.y*5000 };
+  const ctx = XR.ctx;
+  const sa = xrayImgToScreen(a), sb = xrayImgToScreen(b);
+  ctx.strokeStyle = color; ctx.lineWidth = width;
+  ctx.setLineDash([5,3]);
+  ctx.beginPath(); ctx.moveTo(sa.x, sa.y); ctx.lineTo(sb.x, sb.y); ctx.stroke();
+  ctx.setLineDash([]);
+}
+function drawDot(p, color){
+  const ctx = XR.ctx;
+  const s = xrayImgToScreen(p);
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(s.x, s.y, 5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(s.x, s.y, 3.5, 0, Math.PI*2); ctx.fill();
+}
+function drawLabeledDot(p, color, label){
+  drawDot(p, color);
+  const ctx = XR.ctx;
+  const s = xrayImgToScreen(p);
+  ctx.font = 'bold 11px IBM Plex Mono, monospace';
+  ctx.fillStyle = '#000';
+  ctx.fillText(label, s.x+8, s.y-7);
+  ctx.fillStyle = color;
+  ctx.fillText(label, s.x+7, s.y-8);
+}
+function drawCircleImg(c, color, width){
+  const ctx = XR.ctx;
+  const s = xrayImgToScreen({x:c.x, y:c.y});
+  const r = c.r * XR.scale;
+  ctx.strokeStyle = color; ctx.lineWidth = width;
+  ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI*2); ctx.stroke();
+  // Cross at center
+  ctx.beginPath();
+  ctx.moveTo(s.x-6, s.y); ctx.lineTo(s.x+6, s.y);
+  ctx.moveTo(s.x, s.y-6); ctx.lineTo(s.x, s.y+6);
+  ctx.stroke();
+}
+function midPt(a,b){ return { x:(a.x+b.x)/2, y:(a.y+b.y)/2 }; }
+
+function drawPlate(side){
+  const d = xrayData();
+  const p = d['plate'+side]; if(!p || !p.entry) return;
+  const ctx = XR.ctx;
+  const angle = (p.angle || 110) * Math.PI/180;
+
+  // Blade length default 35 mm; side plate 64 mm (4-hole 4.5mm pediatric)
+  let bladePx = xrayMmToPx(35);
+  let sidePx = xrayMmToPx(64);
+  if(bladePx == null){
+    // No calibration → use heuristic: blade = 1/3 of distance to shaftEnd if provided
+    if(p.shaftEnd){
+      const dist = Math.hypot(p.shaftEnd.x - p.entry.x, p.shaftEnd.y - p.entry.y);
+      bladePx = dist * 0.35;
+      sidePx = dist * 0.75;
+    } else {
+      bladePx = 60; sidePx = 120;
+    }
+  }
+  const bladeWidth = Math.max(4, bladePx * 0.18);
+  const sideWidth = Math.max(5, sidePx * 0.10);
+
+  // Blade direction: along neck axis if defined, else toward image down
+  let bladeDir = null;
+  const na = d.points['neck_'+side+'_a'], nb = d.points['neck_'+side+'_b'];
+  if(na && nb){
+    // Direction from neck base to head — i.e. from interior toward entry point
+    // We want blade direction pointing FROM entry into the femoral head (deeper into head)
+    // Neck axis goes from neck base to head center. So blade direction = (head - base) = (nb - na) if nb is more toward head, else flip
+    // Heuristic: pick direction so the dot product with vector from entry to neck-axis-far-end is positive
+    const v1 = { x: nb.x - na.x, y: nb.y - na.y };
+    bladeDir = xraySafeUnit(v1);
+    // Determine which direction "into head" is
+    // Find which of na,nb is farther from entry — entry should be near head, so blade direction = from entry toward FAR head — actually entry IS where blade enters the head. Blade goes into the head along neck axis. So blade direction = direction TOWARD the head center from entry.
+    // The head center is on the side of na or nb whichever is closer to entry.
+    // If entry is near nb (head side), blade goes further in that direction → bladeDir = (nb - na)
+    // If entry is near na, bladeDir = (na - nb)
+    const dEntry_na = Math.hypot(p.entry.x - na.x, p.entry.y - na.y);
+    const dEntry_nb = Math.hypot(p.entry.x - nb.x, p.entry.y - nb.y);
+    if(dEntry_na < dEntry_nb){
+      bladeDir = xraySafeUnit({ x: na.x - nb.x, y: na.y - nb.y });
+    }
+  } else {
+    bladeDir = { x: 0, y: -1 }; // up
+  }
+  if(!bladeDir) return;
+
+  // Blade goes from entry deeper into head, so the visible blade segment is FROM entry, going OUT of head (toward junction)
+  // Junction = entry - bladePx * bladeDir (opposite of "into head")
+  const oppDir = { x: -bladeDir.x, y: -bladeDir.y };
+  const junction = { x: p.entry.x + oppDir.x * bladePx, y: p.entry.y + oppDir.y * bladePx };
+
+  // Side plate direction: rotate bladeDir by (180 - angle) to get the angle between blade (junction→entry) and side plate (junction→sideEnd)
+  // We want angle BETWEEN (junction→entry) and (junction→sideEnd) = blade plate angle (e.g. 110°)
+  // (junction→entry) = bladeDir (since we go from junction toward entry, that's +bladeDir)
+  // (junction→sideEnd) = rotate(bladeDir, ±(180°-angle))  [supplementary, away from blade]
+  // Actually: rotate bladeDir by (angle) gets us a direction at angle θ from blade. We want them ON OPPOSITE sides of the femur so the side plate goes laterally toward the shaft.
+  // Determine rotation sign: rotate so the result points toward where shaft would be (down-ish, away from head)
+  // We pick rotation that gives the direction closer to (-bladeDir) shifted by (angle-180)°
+  // Easier: rotate(-bladeDir, ±(angle - 180)) actually I'll just compute both and pick the one whose direction has positive dot product with (shaftEnd - junction) if user clicked one, else fallback to image-down direction
+
+  function rotate(v, deg){
+    const r = deg*Math.PI/180;
+    const c = Math.cos(r), s = Math.sin(r);
+    return { x: v.x*c - v.y*s, y: v.x*s + v.y*c };
+  }
+  // (junction → sideEnd) at angle (180° - plateAngle) from blade direction (junction→entry).
+  // Wait: if plateAngle = 110°, and junction is the apex, then the angle between the two arms = 110°.
+  // (junction→entry) is +bladeDir. (junction→sideEnd) is rotated from +bladeDir by ±110°.
+  const sideAngle = p.angle || 110;
+  const candA = rotate(bladeDir, sideAngle);
+  const candB = rotate(bladeDir, -sideAngle);
+  let sidePlateDir = candA;
+  if(p.shaftEnd){
+    // pick whichever has higher dot product with (shaftEnd - junction)
+    const ref = { x: p.shaftEnd.x - junction.x, y: p.shaftEnd.y - junction.y };
+    const dotA = candA.x*ref.x + candA.y*ref.y;
+    const dotB = candB.x*ref.x + candB.y*ref.y;
+    sidePlateDir = dotA > dotB ? candA : candB;
+  } else {
+    // pick the one pointing more downward (image y+)
+    sidePlateDir = candA.y > candB.y ? candA : candB;
+  }
+
+  let sideEnd;
+  if(p.shaftEnd){
+    // Snap side plate to the line from junction to shaftEnd direction, at length sidePx
+    const refU = xraySafeUnit({ x: p.shaftEnd.x - junction.x, y: p.shaftEnd.y - junction.y });
+    if(refU) sidePlateDir = refU;
+    sideEnd = { x: junction.x + sidePlateDir.x * sidePx, y: junction.y + sidePlateDir.y * sidePx };
+  } else {
+    sideEnd = { x: junction.x + sidePlateDir.x * sidePx, y: junction.y + sidePlateDir.y * sidePx };
+  }
+
+  // Compute screen-space rectangles for blade and side plate
+  // Blade rectangle: from entry to junction with thickness bladeWidth
+  ctx.save();
+  ctx.globalAlpha = 0.78;
+  function drawThickLine(a, b, w, fill){
+    const sa = xrayImgToScreen(a), sb = xrayImgToScreen(b);
+    const u = xraySafeUnit({ x: sb.x-sa.x, y: sb.y-sa.y }); if(!u) return;
+    const perp = { x: -u.y, y: u.x };
+    const halfW = (w * XR.scale) / 2;
+    ctx.beginPath();
+    ctx.moveTo(sa.x + perp.x*halfW, sa.y + perp.y*halfW);
+    ctx.lineTo(sb.x + perp.x*halfW, sb.y + perp.y*halfW);
+    ctx.lineTo(sb.x - perp.x*halfW, sb.y - perp.y*halfW);
+    ctx.lineTo(sa.x - perp.x*halfW, sa.y - perp.y*halfW);
+    ctx.closePath();
+    ctx.fillStyle = fill;
+    ctx.fill();
+    ctx.strokeStyle = '#0a2540';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  }
+  drawThickLine(p.entry, junction, bladeWidth, '#c9a55a');
+  drawThickLine(junction, sideEnd, sideWidth, '#3aa5b1');
+  ctx.restore();
+
+  // Junction marker + entry/end handles
+  drawLabeledDot(p.entry, '#c9a55a', '⊕');
+  drawDot(junction, '#0a2540');
+  drawLabeledDot(sideEnd, '#3aa5b1', side);
+
+  // Angle annotation
+  const jcs = xrayImgToScreen(junction);
+  ctx.fillStyle = '#0a2540';
+  ctx.font = 'bold 13px Fraunces, serif';
+  ctx.fillText(`${(p.angle||110)}°`, jcs.x + 10, jcs.y - 10);
+
+  // If shaft axis is defined, compute varus correction angle
+  const sa = d.points['shaft_'+side+'_a'], sb = d.points['shaft_'+side+'_b'];
+  if(sa && sb){
+    const shaftU = xraySafeUnit({ x: sb.x-sa.x, y: sb.y-sa.y });
+    const sideU = xraySafeUnit({ x: sideEnd.x-junction.x, y: sideEnd.y-junction.y });
+    if(shaftU && sideU){
+      const cosA = Math.max(-1, Math.min(1, Math.abs(shaftU.x*sideU.x + shaftU.y*sideU.y)));
+      const corr = Math.acos(cosA) * 180/Math.PI;
+      // Display next to junction
+      ctx.fillStyle = '#a4341d';
+      ctx.font = 'bold 11px IBM Plex Mono, monospace';
+      ctx.fillText(`Δ ${corr.toFixed(0)}°`, jcs.x + 10, jcs.y + 10);
+    }
+  }
+
+  // Save computed junction back for hit-testing in future (read-only display info)
+  p._junction = junction;
+  p._sideEnd = sideEnd;
+}
+
+function drawToolGhost(){
+  // Show outline of where next tool point will go (mouse-follow) — simplified: no hover state for now
+}
+
+// ============== STATUS & READOUT ==============
+function xrayUpdateStatus(){
+  const d = xrayData(); if(!d) return;
+
+  function pts(key, expected){
+    let have = 0;
+    if(key==='hil'){ have = (d.points.hil_a?1:0) + (d.points.hil_b?1:0); }
+    else if(key==='perkL'){ have = d.points.perk_L?1:0; }
+    else if(key==='perkR'){ have = d.points.perk_R?1:0; }
+    else if(key==='headL'){ have = (d.points.head_L||[]).filter(Boolean).length; }
+    else if(key==='headR'){ have = (d.points.head_R||[]).filter(Boolean).length; }
+    else if(key==='shaftL'){ have = (d.points.shaft_L_a?1:0)+(d.points.shaft_L_b?1:0); }
+    else if(key==='shaftR'){ have = (d.points.shaft_R_a?1:0)+(d.points.shaft_R_b?1:0); }
+    else if(key==='neckL'){ have = (d.points.neck_L_a?1:0)+(d.points.neck_L_b?1:0); }
+    else if(key==='neckR'){ have = (d.points.neck_R_a?1:0)+(d.points.neck_R_b?1:0); }
+    else if(key==='cal'){ have = (d.cal && d.cal.p1?1:0) + (d.cal && d.cal.p2?1:0); }
+    else if(key==='plateL'){ have = (d.plateL && d.plateL.entry?1:0) + (d.plateL && d.plateL.shaftEnd?1:0); }
+    else if(key==='plateR'){ have = (d.plateR && d.plateR.entry?1:0) + (d.plateR && d.plateR.shaftEnd?1:0); }
+    return have;
+  }
+
+  const stMap = [
+    ['hil',2],['perkL',1],['perkR',1],['headL',3],['headR',3],
+    ['shaftL',2],['shaftR',2],['neckL',2],['neckR',2],
+    ['plateL',2],['plateR',2],
+  ];
+  stMap.forEach(([k,n])=>{
+    const have = pts(k, n);
+    const el = document.getElementById('st-'+k);
+    if(el) el.textContent = `${have}/${n}`;
+    const btn = document.querySelector(`.xt-btn[data-tool="${k}"]`);
+    if(btn && !btn.classList.contains('active')){
+      btn.classList.toggle('done', have === n);
+      btn.classList.toggle('partial', have > 0 && have < n);
+    }
+  });
+  // cal special
+  const cHave = pts('cal');
+  const cEl = document.getElementById('st-cal');
+  if(cEl) cEl.textContent = (d.cal && d.cal.mm) ? `${d.cal.mm} mm` : `${cHave}/2`;
+  const cBtn = document.querySelector('.xt-btn[data-tool="cal"]');
+  if(cBtn && !cBtn.classList.contains('active')){
+    cBtn.classList.toggle('done', !!(d.cal && d.cal.mm));
+    cBtn.classList.toggle('partial', cHave > 0 && !(d.cal && d.cal.mm));
+  }
+
+  // Bottom strip
+  const sL = document.getElementById('xrayStatusL');
+  const sR = document.getElementById('xrayStatusR');
+  const strip = document.getElementById('xrayStatus');
+  if(XR.tool){
+    const t = XR_TOOLS[XR.tool];
+    sL.textContent = `Placing: ${t.label} (${XR.toolStep+1}/${t.count})`;
+    strip.classList.add('active-tool');
+  } else {
+    sL.textContent = 'Drag points to adjust · Shift-drag to pan · scroll to zoom';
+    strip.classList.remove('active-tool');
+  }
+  sR.textContent = d.cal && d.cal.mm ? `Calibrated ${d.cal.mm} mm` : 'Not calibrated';
+}
+
+function xrayUpdateReadout(){
+  const d = xrayData(); if(!d) return;
+  const el = document.getElementById('xrayReadout'); if(!el) return;
+  const mpL = xrayComputeMP('L'), mpR = xrayComputeMP('R');
+  const aiL = xrayComputeAI('L'), aiR = xrayComputeAI('R');
+  const nsaL = xrayComputeNSA('L'), nsaR = xrayComputeNSA('R');
+
+  function cls(v, type){
+    if(v == null) return '';
+    if(type==='MP'){ if(v>=50) return 'alert'; if(v>=33) return 'warn'; return 'ok'; }
+    if(type==='AI'){ if(v>=30) return 'alert'; if(v>=25) return 'warn'; return 'ok'; }
+    if(type==='NSA'){ if(v>=155) return 'alert'; if(v>=145) return 'warn'; return 'ok'; }
+    return '';
+  }
+  function v(x, unit){ if(x==null) return '—'; return Math.round(x*10)/10 + `<span class="u">${unit}</span>`; }
+  el.innerHTML = `
+    <div class="xrm ${cls(mpL,'MP')}"><div class="l">MP L</div><div class="v">${v(mpL,'%')}</div></div>
+    <div class="xrm ${cls(mpR,'MP')}"><div class="l">MP R</div><div class="v">${v(mpR,'%')}</div></div>
+    <div class="xrm ${cls(aiL,'AI')}"><div class="l">AI L</div><div class="v">${v(aiL,'°')}</div></div>
+    <div class="xrm ${cls(aiR,'AI')}"><div class="l">AI R</div><div class="v">${v(aiR,'°')}</div></div>
+    <div class="xrm ${cls(nsaL,'NSA')}"><div class="l">NSA L</div><div class="v">${v(nsaL,'°')}</div></div>
+    <div class="xrm ${cls(nsaR,'NSA')}"><div class="l">NSA R</div><div class="v">${v(nsaR,'°')}</div></div>
+  `;
+  xrayUpdateStatus();
+}
+
+function xrayApply(){
+  const d = xrayData(); if(!d) return;
+  const c = currentCase();
+  const map = {
+    MP_L: xrayComputeMP('L'), MP_R: xrayComputeMP('R'),
+    AI_L: xrayComputeAI('L'), AI_R: xrayComputeAI('R'),
+    NSA_L: xrayComputeNSA('L'), NSA_R: xrayComputeNSA('R'),
+  };
+  let count = 0;
+  c.img = c.img || {};
+  for(const k in map){
+    if(map[k] != null){
+      c.img[k] = Math.round(map[k]*10)/10;
+      count++;
+    }
+  }
+  c.updatedAt = today();
+  saveState();
+  // refresh imaging fields
+  bindForm();
+  renderImagingMetrics();
+  renderPlanMetrics();
+  renderDiagrams();
+  renderSummary();
+  toast(`Applied ${count} measurement${count===1?'':'s'} to Imaging`);
+}
 
 // ============== INIT ==============
 loadState();
